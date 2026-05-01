@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendas Estruturadas — fost</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:        #06006e;
+    --navy-mid:    #0a0080;
+    --navy-light:  #0d00a0;
+    --purple:      #7B2FFF;
+    --purple-soft: #9B59FF;
+    --cyan:        #00D4FF;
+    --white:       #f0eeff;
+    --muted:       rgba(220,215,255,0.85);   /* era 0.55 — muito escuro, agora legível */
+    --border:      rgba(123,47,255,0.18);
+    --card-bg:     rgba(123,47,255,0.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    font-size: 16px;   /* base um pouco maior */
+  }
+
+  /* ── NOISE TEXTURE overlay ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.35;
+  }
+
+  /* ── GRADIENT ORBS ── */
+  .orb {
+    position: absolute; border-radius: 50%; pointer-events: none;
+    filter: blur(80px); opacity: 0.25;
+  }
+  .orb-1 { width: 600px; height: 600px; background: var(--purple); top: -200px; right: -150px; }
+  .orb-2 { width: 400px; height: 400px; background: var(--cyan); top: 200px; left: -100px; opacity: 0.1; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(6,0,110,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-logo-icon {
+    width: 28px; height: 28px;
+  }
+  .nav-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 800;
+    background: linear-gradient(135deg, var(--cyan), var(--purple-soft));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .nav-product {
+    font-size: 14px; font-weight: 500; letter-spacing: 0.04em;
+    color: rgba(210,205,255,0.9);   /* antes var(--muted) muito apagado */
+  }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--purple), var(--purple-soft));
+    color: white; border: none; cursor: pointer;
+    padding: 10px 24px; border-radius: 6px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px; font-weight: 600; letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 130px 56px 100px;
+    position: relative; overflow: hidden;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 780px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(123,47,255,0.15);
+    border: 1px solid rgba(123,47,255,0.35);
+    border-radius: 100px;
+    padding: 6px 16px 6px 8px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 36px;
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(48px, 7.5vw, 88px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+  .hero-title .grad {
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--purple-soft) 60%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 19px; font-weight: 400;
+    color: rgba(220,215,255,0.9);   /* antes var(--muted) muito escuro */
+    line-height: 1.75;
+    max-width: 520px;
+    margin-bottom: 52px;
+  }
+
+  .hero-actions {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple), var(--purple-soft));
+    color: white; border: none; cursor: pointer;
+    padding: 16px 36px; border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px; font-weight: 700;
+    text-decoration: none; display: inline-block;
+    transition: all 0.25s;
+    box-shadow: 0 8px 32px rgba(123,47,255,0.35);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(123,47,255,0.5);
+  }
+  .btn-secondary {
+    color: rgba(210,205,255,0.85); font-size: 15px; font-weight: 500;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    transition: color 0.2s;
+  }
+  .btn-secondary:hover { color: var(--white); }
+  .btn-secondary::after { content: '↓'; font-size: 16px; }
+
+  .hero-stat-row {
+    display: flex; gap: 48px; margin-top: 72px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .hero-stat strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 28px; font-weight: 800;
+    background: linear-gradient(135deg, var(--cyan), var(--purple-soft));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
+  }
+  .hero-stat span { font-size: 14px; color: rgba(210,205,255,0.85); }
+
+  /* ── DORES ── */
+  .section { padding: 120px 56px; position: relative; z-index: 1; }
+  .section-border { border-top: 1px solid var(--border); }
+
+  .label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 32px;
+  }
+  .label::before {
+    content: '';
+    width: 20px; height: 2px;
+    background: linear-gradient(to right, var(--cyan), var(--purple));
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  /* DORES layout */
+  .dores-wrap { max-width: 1100px; margin: 0 auto; }
+  .dores-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .dores-left { padding-right: 40px; }
+  .dores-intro {
+    font-size: 17px; color: rgba(220,215,255,0.9); line-height: 1.75; margin-top: 20px;
+  }
+  .dores-list { margin-top: 56px; display: flex; flex-direction: column; gap: 0; }
+  .dor {
+    display: flex; gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .dor:first-child { border-top: 1px solid var(--border); }
+  .dor-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.08em;
+    color: var(--purple-soft); min-width: 28px; padding-top: 3px;
+  }
+  .dor-text { font-size: 16px; line-height: 1.65; color: rgba(225,220,255,0.9); }
+  .dor-text strong { color: var(--white); font-weight: 700; }
+
+  /* ── BREAK QUOTE ── */
+  .break-quote {
+    padding: 100px 56px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    position: relative; overflow: hidden; z-index: 1;
+  }
+  .break-quote::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 100% at 50% 50%, rgba(123,47,255,0.1), transparent);
+  }
+  .quote-text {
+    position: relative;
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(26px, 4vw, 48px);
+    font-weight: 800; line-height: 1.2;
+    max-width: 820px; margin: 0 auto;
+    color: rgba(240,238,255,0.9);   /* era 0.65 — muito apagado */
+  }
+  .quote-text .highlight {
+    background: linear-gradient(135deg, var(--cyan), var(--purple-soft));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  /* ── ENTREGÁVEIS ── */
+  .entrega-wrap { max-width: 1100px; margin: 0 auto; }
+  .entrega-header {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: end; margin-bottom: 64px;
+  }
+  .entrega-desc { font-size: 17px; color: rgba(220,215,255,0.9); line-height: 1.75; }
+
+  .entrega-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 2px; background: var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .e-card {
+    background: var(--card-bg);
+    padding: 44px 40px;
+    position: relative; overflow: hidden;
+    transition: background 0.3s;
+  }
+  .e-card:hover { background: rgba(123,47,255,0.12); }
+  .e-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .e-card:hover::before { opacity: 1; }
+  .e-card-badge {
+    display: inline-flex;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 20px;
+  }
+  .e-card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 800;
+    margin-bottom: 20px; line-height: 1.2;
+    color: var(--white);
+  }
+  .e-card-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .e-card-list li {
+    font-size: 15px; color: rgba(220,215,255,0.9); line-height: 1.55;
+    padding-left: 18px; position: relative;
+  }
+  .e-card-list li::before {
+    content: '';
+    position: absolute; left: 0; top: 9px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--cyan), var(--purple));
+  }
+
+  /* ── SEMANAS ── */
+  .como-wrap { max-width: 1100px; margin: 0 auto; }
+  .como-header { text-align: center; margin-bottom: 80px; }
+  .como-sub { font-size: 16px; color: rgba(210,205,255,0.9); margin-top: 12px; }
+
+  .timeline {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    position: relative; gap: 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 32px; left: 12%; right: 12%; height: 1px;
+    background: linear-gradient(to right, transparent, var(--purple) 20%, var(--cyan) 80%, transparent);
+  }
+  .t-item { padding: 0 20px; text-align: center; }
+  .t-dot {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--navy);
+    border: 1px solid var(--purple);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 28px; position: relative; z-index: 1;
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 800;
+    color: var(--purple-soft);
+    transition: all 0.3s;
+  }
+  .t-item:hover .t-dot {
+    background: linear-gradient(135deg, var(--purple), var(--purple-soft));
+    color: white;
+    box-shadow: 0 0 24px rgba(123,47,255,0.5);
+    border-color: transparent;
+  }
+  .t-week {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 10px;
+  }
+  .t-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px; font-weight: 800; line-height: 1.2; margin-bottom: 10px;
+    color: var(--white);
+  }
+  .t-desc { font-size: 14px; color: rgba(210,205,255,0.88); line-height: 1.65; }
+
+  /* ── PARA QUEM ── */
+  .quem-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+
+  .quem-block-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 800; line-height: 1.15; margin-bottom: 32px;
+  }
+  .quem-list { list-style: none; display: flex; flex-direction: column; }
+  .quem-li {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px 0; border-bottom: 1px solid var(--border);
+    font-size: 16px; line-height: 1.6;
+  }
+  .quem-li:first-child { border-top: 1px solid var(--border); }
+  .quem-icon {
+    width: 22px; height: 22px; min-width: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; margin-top: 2px;
+  }
+  .yes { background: linear-gradient(135deg, var(--purple), var(--cyan)); color: white; }
+  .no { background: rgba(255,255,255,0.06); color: rgba(200,195,255,0.7); }
+  .li-yes { color: rgba(235,230,255,0.95); }
+  .li-no { color: rgba(200,195,255,0.7); }
+
+  /* ── RESULTADO ── */
+  .resultado-wrap { max-width: 900px; margin: 0 auto; text-align: center; }
+  .resultado-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 800; line-height: 1.0; margin-bottom: 16px;
+  }
+  .resultado-sub { font-size: 18px; color: rgba(220,215,255,0.9); line-height: 1.75; margin-bottom: 64px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+  .res-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    background: var(--border); border-radius: 12px; overflow: hidden;
+    margin-bottom: 64px;
+  }
+  .res-card {
+    background: var(--card-bg);
+    padding: 36px 28px; text-align: left;
+    transition: background 0.3s;
+  }
+  .res-card:hover { background: rgba(123,47,255,0.12); }
+  .res-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: rgba(123,47,255,0.15);
+    border: 1px solid rgba(123,47,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 20px;
+  }
+  .res-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; margin-bottom: 8px; color: var(--white); }
+  .res-desc { font-size: 15px; color: rgba(215,210,255,0.9); line-height: 1.65; }
+
+  /* ── CTA FINAL ── */
+  .cta-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .cta-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 800; line-height: 1.05; margin-bottom: 20px;
+  }
+  .cta-title .grad {
+    background: linear-gradient(135deg, var(--cyan), var(--purple-soft));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .cta-sub { font-size: 17px; color: rgba(220,215,255,0.9); line-height: 1.75; margin-bottom: 40px; }
+
+  .detail-list { display: flex; flex-direction: column; gap: 0; }
+  .detail-row {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 0; border-bottom: 1px solid var(--border);
+  }
+  .detail-row:first-child { border-top: 1px solid var(--border); }
+  .detail-icon {
+    width: 36px; height: 36px; min-width: 36px; border-radius: 8px;
+    background: rgba(123,47,255,0.12);
+    border: 1px solid rgba(123,47,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; margin-top: 2px;
+  }
+  .detail-label { font-size: 14px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 4px; color: var(--white); }
+  .detail-val { font-size: 14px; color: rgba(215,210,255,0.9); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 40px 56px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 14px; color: rgba(210,205,255,0.8);
+    position: relative; z-index: 1;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fu { animation: fadeUp 0.75s ease forwards; opacity: 0; }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.25s; }
+  .d3 { animation-delay: 0.4s; }
+  .d4 { animation-delay: 0.55s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-product { display: none; }
+    .hero, .section { padding: 90px 24px 80px; }
+    .break-quote { padding: 72px 24px; }
+    .dores-grid, .entrega-header, .quem-wrap, .cta-wrap { grid-template-columns: 1fr; gap: 48px; }
+    .dores-left { padding-right: 0; }
+    .entrega-grid, .res-grid { grid-template-columns: 1fr; }
+    .timeline { grid-template-columns: 1fr 1fr; gap: 48px; }
+    .timeline::before { display: none; }
+    .hero-stat-row { gap: 32px; }
+    footer { flex-direction: column; gap: 12px; padding: 32px 24px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 14 L10 8 L14 12 L20 6 L24 10" stroke="url(#g1)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs>
+        <linearGradient id="g1" x1="4" y1="14" x2="24" y2="6" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#00D4FF"/>
+          <stop offset="100%" stop-color="#9B59FF"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <span class="nav-logo-text">fost</span>
+    <span style="color:var(--border);margin:0 8px;">|</span>
+    <span class="nav-product">Vendas Estruturadas</span>
+  </div>
+  <a href="https://wa.me/5541999352190" target="_blank" rel="noopener" class="nav-cta">Quero começar</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge fu">
+      <span class="hero-badge-dot"></span>
+      Programa de Implantação Comercial · 30 dias
+    </div>
+    <h1 class="hero-title fu d1">
+      Seu comercial<br>
+      <span class="grad">pronto e rodando</span><br>
+      em 30 dias.
+    </h1>
+    <p class="hero-sub fu d2">
+      Sem plano bonito que fica na gaveta. Sem teoria sem fim.<br>
+      A gente constrói junto — e você sai com o processo <strong style="color:var(--white);font-weight:700;">funcionando de verdade</strong>.
+    </p>
+    <div class="hero-actions fu d3">
+      <a href="https://wa.me/5541999352190" target="_blank" rel="noopener" class="btn-primary">Quero estruturar meu comercial</a>
+      <a href="#como" class="btn-secondary">Ver como funciona</a>
+    </div>
+    <div class="hero-stat-row fu d4">
+      <div class="hero-stat">
+        <strong>30</strong>
+        <span>dias de implantação</span>
+      </div>
+      <div class="hero-stat">
+        <strong>4</strong>
+        <span>encontros online</span>
+      </div>
+      <div class="hero-stat">
+        <strong>100%</strong>
+        <span>aplicado no seu negócio</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DORES -->
+<section class="section section-border">
+  <div class="dores-wrap">
+    <div class="dores-grid">
+      <div class="dores-left">
+        <div class="label">O problema real</div>
+        <h2 class="section-title">Você vende.<br>Mas não sabe exatamente por quê.</h2>
+        <p class="dores-intro">Seu negócio depende demais de você. Cada venda passa pela sua cabeça, pelo seu WhatsApp, pelo seu instinto. Isso funcionou até aqui — mas tem um teto.</p>
+      </div>
+      <div class="dores-list">
+        <div class="dor">
+          <span class="dor-num">01</span>
+          <p class="dor-text"><strong>O dono é o funil inteiro.</strong> Prospecção, follow-up, proposta, fechamento — tudo passa por você. Se você parar, as vendas param.</p>
+        </div>
+        <div class="dor">
+          <span class="dor-num">02</span>
+          <p class="dor-text"><strong>Vendedor novo não performa.</strong> Você não consegue explicar o que funciona. O processo está na sua cabeça, não no papel.</p>
+        </div>
+        <div class="dor">
+          <span class="dor-num">03</span>
+          <p class="dor-text"><strong>CRM virou cemitério.</strong> Negócios parados, follow-ups esquecidos, nenhuma visibilidade real do que está no funil.</p>
+        </div>
+        <div class="dor">
+          <span class="dor-num">04</span>
+          <p class="dor-text"><strong>Resultado varia demais.</strong> Mês bom, mês ruim — sem entender por quê. Você reage ao que acontece em vez de controlar o resultado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE BREAK -->
+<div class="break-quote">
+  <p class="quote-text">
+    O problema não é vendedor ruim.<br>
+    É <span class="highlight">falta de processo.</span>
+  </p>
+</div>
+
+<!-- ENTREGÁVEIS -->
+<section class="section section-border">
+  <div class="entrega-wrap">
+    <div class="entrega-header">
+      <div>
+        <div class="label">O que você constrói</div>
+        <h2 class="section-title">Quatro pilares.<br>Um comercial completo.</h2>
+      </div>
+      <p class="entrega-desc">Cada semana você entrega uma parte estruturada do seu processo. No final dos 30 dias, tudo está rodando — não só desenhado.</p>
+    </div>
+    <div class="entrega-grid">
+      <div class="e-card">
+        <span class="e-card-badge">Semana 1</span>
+        <h3 class="e-card-title">Funil de Vendas Estruturado</h3>
+        <ul class="e-card-list">
+          <li>Etapas claras com critérios de passagem definidos</li>
+          <li>Pipeline configurado no seu CRM</li>
+          <li>Visibilidade total de onde cada negócio está</li>
+        </ul>
+      </div>
+      <div class="e-card">
+        <span class="e-card-badge">Semana 2</span>
+        <h3 class="e-card-title">Playbook Comercial</h3>
+        <ul class="e-card-list">
+          <li>Cadência e roteiro de abordagem por perfil de cliente</li>
+          <li>Script de diagnóstico e qualificação</li>
+          <li>Roteiro de fechamento e gestão de objeções</li>
+        </ul>
+      </div>
+      <div class="e-card">
+        <span class="e-card-badge">Semana 3</span>
+        <h3 class="e-card-title">Rotina Comercial</h3>
+        <ul class="e-card-list">
+          <li>O que o time faz todo dia e toda semana</li>
+          <li>Como o gestor acompanha sem microgerenciar</li>
+          <li>Reuniões de pipeline que geram decisão, não relatório</li>
+        </ul>
+      </div>
+      <div class="e-card">
+        <span class="e-card-badge">Semana 4</span>
+        <h3 class="e-card-title">Métricas que Importam</h3>
+        <ul class="e-card-list">
+          <li>KPIs de performance e resultado definidos</li>
+          <li>Dashboard que mostra onde está o gargalo</li>
+          <li>Clareza de onde agir para melhorar resultado</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="section section-border" id="como">
+  <div class="como-wrap">
+    <div class="como-header">
+      <div class="label" style="justify-content:center;">Como funciona</div>
+      <h2 class="section-title">30 dias. 4 semanas.<br>1 processo funcionando.</h2>
+      <p class="como-sub">4 encontros online + suporte direto durante todo o processo</p>
+    </div>
+    <div class="timeline">
+      <div class="t-item">
+        <div class="t-dot">1</div>
+        <div class="t-week">Semana 1</div>
+        <div class="t-title">Diagnóstico e Funil</div>
+        <p class="t-desc">Mapeamos onde você está hoje e construímos as etapas do funil com critérios reais do seu negócio.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-dot">2</div>
+        <div class="t-week">Semana 2</div>
+        <div class="t-title">CRM e Pipeline</div>
+        <p class="t-desc">Configuramos o CRM, organizamos os negócios em aberto e criamos o hábito de uso no dia a dia.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-dot">3</div>
+        <div class="t-week">Semana 3</div>
+        <div class="t-title">Playbook Comercial</div>
+        <p class="t-desc">Documentamos o processo de venda — como abordar, diagnosticar e fechar, replicável por qualquer vendedor.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-dot">4</div>
+        <div class="t-week">Semana 4</div>
+        <div class="t-title">Rotina e Métricas</div>
+        <p class="t-desc">Implantamos a rotina semanal e os KPIs. Você sabe o que medir e como agir em cima dos dados.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUEM -->
+<section class="section section-border">
+  <div class="quem-wrap">
+    <div>
+      <div class="label">Fit</div>
+      <h2 class="quem-block-title">Para quem<br>esse programa é feito</h2>
+      <ul class="quem-list">
+        <li class="quem-li"><span class="quem-icon yes">✓</span><span class="li-yes">Empresa B2B — fatura entre R$50k e R$500k/mês</span></li>
+        <li class="quem-li"><span class="quem-icon yes">✓</span><span class="li-yes">Já vende — não está validando produto do zero</span></li>
+        <li class="quem-li"><span class="quem-icon yes">✓</span><span class="li-yes">O dono ainda centraliza a maior parte das vendas</span></li>
+        <li class="quem-li"><span class="quem-icon yes">✓</span><span class="li-yes">Tem pelo menos 1 vendedor além do fundador</span></li>
+        <li class="quem-li"><span class="quem-icon yes">✓</span><span class="li-yes">Ticket médio acima de R$1.000</span></li>
+        <li class="quem-li"><span class="quem-icon yes">✓</span><span class="li-yes">Tem tempo e disposição para implementar junto</span></li>
+      </ul>
+    </div>
+    <div>
+      <div class="label" style="color:rgba(200,195,255,0.7);">Não é para você se</div>
+      <h2 class="quem-block-title" style="color:rgba(200,195,255,0.75);">Alguns casos onde não fazemos sentido</h2>
+      <ul class="quem-list">
+        <li class="quem-li"><span class="quem-icon no">✕</span><span class="li-no">Ainda está validando o produto ou modelo de negócio</span></li>
+        <li class="quem-li"><span class="quem-icon no">✕</span><span class="li-no">Busca marketing, branding ou geração de leads</span></li>
+        <li class="quem-li"><span class="quem-icon no">✕</span><span class="li-no">Quer consultoria de "ideias" sem execução</span></li>
+        <li class="quem-li"><span class="quem-icon no">✕</span><span class="li-no">Não tem disponibilidade para dedicar tempo às implementações</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTADO -->
+<section class="section section-border">
+  <div class="resultado-wrap">
+    <div class="label" style="justify-content:center;">O que você vai ter</div>
+    <h2 class="resultado-title">
+      Você não sai com<br>
+      <span style="background:linear-gradient(135deg,var(--cyan),var(--purple-soft));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">um plano</span>.
+    </h2>
+    <p class="resultado-sub" style="margin-bottom:48px;">Você sai com o comercial funcionando. Processo documentado, CRM rodando, time treinado e rotina implantada.</p>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-icon">⚙️</div>
+        <div class="res-title">Processo replicável</div>
+        <p class="res-desc">Qualquer vendedor novo consegue seguir sem depender de você para cada passo.</p>
+      </div>
+      <div class="res-card">
+        <div class="res-icon">🔭</div>
+        <div class="res-title">Visibilidade total</div>
+        <p class="res-desc">Você sabe exatamente onde estão seus negócios e qual é a próxima ação em cada um.</p>
+      </div>
+      <div class="res-card">
+        <div class="res-icon">🎯</div>
+        <div class="res-title">Menos dependência</div>
+        <p class="res-desc">O time opera com autonomia. Você gere resultado — não mais cada tarefa do comercial.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="section section-border" id="cta">
+  <div class="cta-wrap">
+    <div>
+      <div class="label">Próximo passo</div>
+      <h2 class="cta-title">Pronto para ter um comercial que <span class="grad">funciona</span>?</h2>
+      <p class="cta-sub">Em 30 dias você tem um processo real, rodando no seu negócio. Não um documento, não uma apresentação — o comercial de pé.</p>
+      <a href="https://wa.me/5541999352190" target="_blank" rel="noopener" class="btn-primary" style="font-size:16px;padding:18px 44px;">Quero começar agora →</a>
+    </div>
+    <div class="detail-list">
+      <div class="detail-row">
+        <div class="detail-icon">⏱</div>
+        <div>
+          <div class="detail-label">Duração</div>
+          <div class="detail-val">30 dias — 4 semanas de implantação ativa</div>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-icon">💻</div>
+        <div>
+          <div class="detail-label">Formato</div>
+          <div class="detail-val">4 encontros online + suporte direto durante todo o processo</div>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-icon">✅</div>
+        <div>
+          <div class="detail-label">Entrega semana a semana</div>
+          <div class="detail-val">Cada semana você sai com uma parte do comercial estruturada e funcionando</div>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-icon">🔒</div>
+        <div>
+          <div class="detail-label">Vagas limitadas</div>
+          <div class="detail-val">Processo de aplicação — apenas empresas com fit confirmado entram</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--purple-soft));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">fost</span>
+    <span style="color:var(--border);">|</span>
+    <span>Vendas Estruturadas</span>
+  </div>
+  <span>Programa de Implantação Comercial B2B</span>
+</footer>
+
+</body>
+</html>
