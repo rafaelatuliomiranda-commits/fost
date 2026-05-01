@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vendas Estruturadas — fost</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy:        #06006e;
@@ -30,9 +29,6 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 400;
     overflow-x: hidden;
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;   /* base um pouco maior */
   }
 
   /* ── NOISE TEXTURE overlay ── */
@@ -67,7 +63,7 @@
     width: 28px; height: 28px;
   }
   .nav-logo-text {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 20px; font-weight: 800;
     background: linear-gradient(135deg, var(--cyan), var(--purple-soft));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -81,7 +77,7 @@
     color: white; border: none; cursor: pointer;
     padding: 10px 24px; border-radius: 6px;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 14px; font-weight: 600; letter-spacing: 0.04em;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
     text-decoration: none;
     transition: opacity 0.2s, transform 0.2s;
   }
@@ -90,11 +86,16 @@
   /* ── HERO ── */
   .hero {
     min-height: 100vh;
-    display: flex; align-items: center;
+    display: flex; align-items: center; justify-content: center;
     padding: 130px 56px 100px;
     position: relative; overflow: hidden;
+    text-align: center;
   }
-  .hero-content { position: relative; z-index: 1; max-width: 780px; }
+  .hero-content {
+    position: relative; z-index: 1;
+    max-width: 820px; width: 100%;
+    margin-left: auto; margin-right: auto;
+  }
 
   .hero-badge {
     display: inline-flex; align-items: center; gap: 8px;
@@ -117,36 +118,35 @@
   }
 
   .hero-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(48px, 7.5vw, 88px);
-    font-weight: 700;
-    line-height: 1.08;
-    letter-spacing: -0.01em;
-}
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(32px, 4.5vw, 56px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
   .hero-title .grad {
     background: linear-gradient(135deg, var(--cyan) 0%, var(--purple-soft) 60%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
 
   .hero-sub {
-    font-size: 19px; font-weight: 400;
-    color: rgba(220,215,255,0.9);   /* antes var(--muted) muito escuro */
+    font-size: 18px; font-weight: 400;
+    color: rgba(220,215,255,0.9);
     line-height: 1.75;
-    max-width: 520px;
-    margin-bottom: 52px;
+    max-width: 580px;
+    margin: 0 auto 52px;
   }
 
   .hero-actions {
-    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap;
   }
   .btn-primary {
     background: linear-gradient(135deg, var(--purple), var(--purple-soft));
     color: white; border: none; cursor: pointer;
     padding: 16px 36px; border-radius: 8px;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; font-weight: 700;
+    font-size: 15px; font-weight: 700;
     text-decoration: none; display: inline-block;
     transition: all 0.25s;
     box-shadow: 0 8px 32px rgba(123,47,255,0.35);
@@ -156,30 +156,36 @@
     box-shadow: 0 12px 40px rgba(123,47,255,0.5);
   }
   .btn-secondary {
-    color: rgba(210,205,255,0.85); font-size: 15px; font-weight: 500;
+    color: rgba(210,205,255,0.85); font-size: 14px; font-weight: 500;
     text-decoration: none;
     display: flex; align-items: center; gap: 8px;
     transition: color 0.2s;
   }
   .btn-secondary:hover { color: var(--white); }
-  .btn-secondary::after { content: '↓'; font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; }
+  .btn-secondary::after { content: '↓'; font-size: 16px; }
 
   .hero-stat-row {
-    display: flex; gap: 48px; margin-top: 72px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 72px;
     padding-top: 40px;
     border-top: 1px solid var(--border);
+    text-align: center;
   }
+  .hero-stat {
+    padding: 24px 16px;
+    border-right: 1px solid var(--border);
+  }
+  .hero-stat:last-child { border-right: none; }
   .hero-stat strong {
     display: block;
-    font-family: 'Syne', sans-serif;
-    font-size: 28px; font-weight: 800;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(48px, 6vw, 72px); font-weight: 800;
     background: linear-gradient(135deg, var(--cyan), var(--purple-soft));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    margin-bottom: 4px;
+    margin-bottom: 8px; line-height: 1;
   }
-  .hero-stat span { font-size: 14px; color: rgba(210,205,255,0.85); }
+  .hero-stat span { font-size: 15px; color: rgba(210,205,255,0.9); display: block; }
 
   /* ── DORES ── */
   .section { padding: 120px 56px; position: relative; z-index: 1; }
@@ -198,7 +204,7 @@
   }
 
   .section-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(32px, 4vw, 52px);
     font-weight: 800; line-height: 1.1;
     letter-spacing: -0.01em;
@@ -209,7 +215,7 @@
   .dores-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
   .dores-left { padding-right: 40px; }
   .dores-intro {
-    font-size: 17px; color: rgba(220,215,255,0.9); line-height: 1.75; margin-top: 20px;
+    font-size: 16px; color: rgba(220,215,255,0.9); line-height: 1.75; margin-top: 20px;
   }
   .dores-list { margin-top: 56px; display: flex; flex-direction: column; gap: 0; }
   .dor {
@@ -219,13 +225,11 @@
   }
   .dor:first-child { border-top: 1px solid var(--border); }
   .dor-num {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 12px; font-weight: 800; letter-spacing: 0.08em;
     color: var(--purple-soft); min-width: 28px; padding-top: 3px;
   }
-  .dor-text { font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; line-height: 1.65; color: rgba(225,220,255,0.9); }
+  .dor-text { font-size: 15px; line-height: 1.65; color: rgba(225,220,255,0.9); }
   .dor-text strong { color: var(--white); font-weight: 700; }
 
   /* ── BREAK QUOTE ── */
@@ -242,7 +246,7 @@
   }
   .quote-text {
     position: relative;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(26px, 4vw, 48px);
     font-weight: 800; line-height: 1.2;
     max-width: 820px; margin: 0 auto;
@@ -259,7 +263,7 @@
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 80px; align-items: end; margin-bottom: 64px;
   }
-  .entrega-desc { font-size: 17px; color: rgba(220,215,255,0.9); line-height: 1.75; }
+  .entrega-desc { font-size: 16px; color: rgba(220,215,255,0.9); line-height: 1.75; }
 
   .entrega-grid {
     display: grid; grid-template-columns: repeat(2, 1fr);
@@ -291,14 +295,14 @@
     color: var(--cyan); margin-bottom: 20px;
   }
   .e-card-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 20px; font-weight: 800;
     margin-bottom: 20px; line-height: 1.2;
     color: var(--white);
   }
   .e-card-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
   .e-card-list li {
-    font-size: 15px; color: rgba(220,215,255,0.9); line-height: 1.55;
+    font-size: 14px; color: rgba(220,215,255,0.9); line-height: 1.55;
     padding-left: 18px; position: relative;
   }
   .e-card-list li::before {
@@ -311,9 +315,7 @@
   /* ── SEMANAS ── */
   .como-wrap { max-width: 1100px; margin: 0 auto; }
   .como-header { text-align: center; margin-bottom: 80px; }
-  .como-sub { font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; color: rgba(210,205,255,0.9); margin-top: 12px; }
+  .como-sub { font-size: 15px; color: rgba(210,205,255,0.9); margin-top: 12px; }
 
   .timeline {
     display: grid; grid-template-columns: repeat(4, 1fr);
@@ -332,7 +334,7 @@
     border: 1px solid var(--purple);
     display: flex; align-items: center; justify-content: center;
     margin: 0 auto 28px; position: relative; z-index: 1;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 20px; font-weight: 800;
     color: var(--purple-soft);
     transition: all 0.3s;
@@ -348,17 +350,17 @@
     color: var(--cyan); margin-bottom: 10px;
   }
   .t-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 17px; font-weight: 800; line-height: 1.2; margin-bottom: 10px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 16px; font-weight: 800; line-height: 1.2; margin-bottom: 10px;
     color: var(--white);
   }
-  .t-desc { font-size: 14px; color: rgba(210,205,255,0.88); line-height: 1.65; }
+  .t-desc { font-size: 13px; color: rgba(210,205,255,0.88); line-height: 1.65; }
 
   /* ── PARA QUEM ── */
   .quem-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
 
   .quem-block-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(24px, 3vw, 36px);
     font-weight: 800; line-height: 1.15; margin-bottom: 32px;
   }
@@ -366,9 +368,7 @@
   .quem-li {
     display: flex; align-items: flex-start; gap: 14px;
     padding: 16px 0; border-bottom: 1px solid var(--border);
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; line-height: 1.6;
+    font-size: 15px; line-height: 1.6;
   }
   .quem-li:first-child { border-top: 1px solid var(--border); }
   .quem-icon {
@@ -384,11 +384,11 @@
   /* ── RESULTADO ── */
   .resultado-wrap { max-width: 900px; margin: 0 auto; text-align: center; }
   .resultado-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(40px, 6vw, 72px);
     font-weight: 800; line-height: 1.0; margin-bottom: 16px;
   }
-  .resultado-sub { font-size: 18px; color: rgba(220,215,255,0.9); line-height: 1.75; margin-bottom: 64px; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .resultado-sub { font-size: 17px; color: rgba(220,215,255,0.9); line-height: 1.75; margin-bottom: 64px; max-width: 600px; margin-left: auto; margin-right: auto; }
 
   .res-grid {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
@@ -408,13 +408,13 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 20px; margin-bottom: 20px;
   }
-  .res-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 800; margin-bottom: 8px; color: var(--white); }
-  .res-desc { font-size: 15px; color: rgba(215,210,255,0.9); line-height: 1.65; }
+  .res-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 16px; font-weight: 800; margin-bottom: 8px; color: var(--white); }
+  .res-desc { font-size: 13px; color: rgba(215,210,255,0.9); line-height: 1.65; }
 
   /* ── CTA FINAL ── */
   .cta-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
   .cta-title {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: clamp(36px, 4vw, 56px);
     font-weight: 800; line-height: 1.05; margin-bottom: 20px;
   }
@@ -422,7 +422,7 @@
     background: linear-gradient(135deg, var(--cyan), var(--purple-soft));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .cta-sub { font-size: 17px; color: rgba(220,215,255,0.9); line-height: 1.75; margin-bottom: 40px; }
+  .cta-sub { font-size: 16px; color: rgba(220,215,255,0.9); line-height: 1.75; margin-bottom: 40px; }
 
   .detail-list { display: flex; flex-direction: column; gap: 0; }
   .detail-row {
@@ -435,19 +435,17 @@
     background: rgba(123,47,255,0.12);
     border: 1px solid rgba(123,47,255,0.25);
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale; margin-top: 2px;
+    font-size: 16px; margin-top: 2px;
   }
-  .detail-label { font-size: 14px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 4px; color: var(--white); }
-  .detail-val { font-size: 14px; color: rgba(215,210,255,0.9); line-height: 1.5; }
+  .detail-label { font-size: 13px; font-weight: 700; letter-spacing: 0.02em; margin-bottom: 4px; color: var(--white); }
+  .detail-val { font-size: 13px; color: rgba(215,210,255,0.9); line-height: 1.5; }
 
   /* ── FOOTER ── */
   footer {
     padding: 40px 56px;
     border-top: 1px solid var(--border);
     display: flex; align-items: center; justify-content: space-between;
-    font-size: 14px; color: rgba(210,205,255,0.8);
+    font-size: 13px; color: rgba(210,205,255,0.8);
     position: relative; z-index: 1;
   }
 
@@ -473,7 +471,9 @@
     .entrega-grid, .res-grid { grid-template-columns: 1fr; }
     .timeline { grid-template-columns: 1fr 1fr; gap: 48px; }
     .timeline::before { display: none; }
-    .hero-stat-row { gap: 32px; }
+    .hero-stat-row { grid-template-columns: repeat(3,1fr); }
+    .hero-stat { padding: 16px 8px; border-right: 1px solid var(--border); }
+    .hero-stat:last-child { border-right: none; }
     footer { flex-direction: column; gap: 12px; padding: 32px 24px; text-align: center; }
   }
 </style>
@@ -496,7 +496,7 @@
     <span style="color:var(--border);margin:0 8px;">|</span>
     <span class="nav-product">Vendas Estruturadas</span>
   </div>
-  <a href="https://wa.me/5541999352190?text=Oi,%20vim%20pelo%20site%20e%20quero%20estruturar%20meu%20comercial" target="_blank" rel="noopener" class="nav-cta">Quero começar</a>
+  <a href="https://wa.me/5541999352190" target="_blank" rel="noopener" class="nav-cta">Quero começar</a>
 </nav>
 
 <!-- HERO -->
@@ -509,17 +509,16 @@
       Programa de Implantação Comercial · 30 dias
     </div>
     <h1 class="hero-title fu d1">
-      Seu comercial funciona.<br>
-      Mas não escala.<br>
-      <span class="grad">A gente resolve isso em 30 dias.</span>
+      Seu comercial<br>
+      <span class="grad">pronto e rodando</span><br>
+      em 30 dias.
     </h1>
     <p class="hero-sub fu d2">
-      Você já vende — o problema não é produto.<br>
-      É falta de processo, previsibilidade e controle do funil.<br><br>
-      Em 4 semanas, você sai com o comercial estruturado, rodando e replicável.
+      Sem plano bonito que fica na gaveta. Sem teoria sem fim.<br>
+      A gente constrói junto — e você sai com o processo <strong style="color:var(--white);font-weight:700;">funcionando de verdade</strong>.
     </p>
     <div class="hero-actions fu d3">
-      <a href="https://wa.me/5541999352190?text=Oi,%20vim%20pelo%20site%20e%20quero%20estruturar%20meu%20comercial" target="_blank" rel="noopener" class="btn-primary">Quero estruturar meu comercial</a>
+      <a href="https://wa.me/5541999352190" target="_blank" rel="noopener" class="btn-primary">Quero estruturar meu comercial</a>
       <a href="#como" class="btn-secondary">Ver como funciona</a>
     </div>
     <div class="hero-stat-row fu d4">
@@ -730,7 +729,7 @@
       <div class="label">Próximo passo</div>
       <h2 class="cta-title">Pronto para ter um comercial que <span class="grad">funciona</span>?</h2>
       <p class="cta-sub">Em 30 dias você tem um processo real, rodando no seu negócio. Não um documento, não uma apresentação — o comercial de pé.</p>
-      <a href="https://wa.me/5541999352190?text=Oi,%20vim%20pelo%20site%20e%20quero%20estruturar%20meu%20comercial" target="_blank" rel="noopener" class="btn-primary" style="font-size:16px;padding:18px 44px;">Quero começar agora →</a>
+      <a href="https://wa.me/5541999352190" target="_blank" rel="noopener" class="btn-primary" style="font-size:15px;padding:18px 44px;">Quero começar agora →</a>
     </div>
     <div class="detail-list">
       <div class="detail-row">
@@ -768,7 +767,7 @@
 <!-- FOOTER -->
 <footer>
   <div style="display:flex;align-items:center;gap:8px;">
-    <span style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--purple-soft));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">fost</span>
+    <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--purple-soft));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">fost</span>
     <span style="color:var(--border);">|</span>
     <span>Vendas Estruturadas</span>
   </div>
