@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Diagnóstico Comercial — fost</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy:        #06006e;
+    --navy-mid:    #0a0080;
+    --purple:      #7B2FFF;
+    --purple-soft: #9B59FF;
+    --cyan:        #00D4FF;
+    --white:       #f0eeff;
+    --muted:       rgba(220,215,255,0.85);
+    --border:      rgba(123,47,255,0.18);
+    --card-bg:     rgba(123,47,255,0.07);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--navy);color:var(--white);
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:400;
+    overflow-x:hidden;min-height:100vh;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:0.35;
+  }
+  .orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px);opacity:0.25}
+  .orb-1{width:600px;height:600px;background:var(--purple);top:-200px;right:-150px}
+  .orb-2{width:400px;height:400px;background:var(--cyan);top:200px;left:-100px;opacity:0.1}
+
+  /* NAV */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:20px 56px;display:flex;align-items:center;justify-content:space-between;
+    background:rgba(6,0,110,0.85);backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-logo{display:flex;align-items:center;gap:10px}
+  .nav-logo-icon{width:28px;height:28px}
+  .nav-logo-text{
+    font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;
+    background:linear-gradient(135deg,var(--cyan),var(--purple-soft));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .nav-product{font-size:14px;font-weight:500;letter-spacing:0.04em;color:rgba(210,205,255,0.9)}
+  .nav-cta{
+    background:linear-gradient(135deg,var(--purple),var(--purple-soft));
+    color:white;border:none;cursor:pointer;padding:10px 24px;border-radius:6px;
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.04em;
+    text-decoration:none;transition:opacity .2s,transform .2s;
+  }
+  .nav-cta:hover{opacity:.88;transform:translateY(-1px)}
+
+  /* HERO */
+  .hero{
+    padding:160px 56px 100px;position:relative;overflow:hidden;
+    text-align:center;border-bottom:1px solid var(--border);
+  }
+  .hero-content{position:relative;z-index:1;max-width:760px;margin:0 auto}
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(123,47,255,0.15);border:1px solid rgba(123,47,255,0.35);
+    border-radius:100px;padding:6px 16px 6px 8px;
+    font-size:13px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--cyan);margin-bottom:36px;
+  }
+  .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+  .hero-title{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-size:clamp(32px,4.5vw,52px);font-weight:800;line-height:1.1;
+    letter-spacing:-0.02em;margin-bottom:24px;
+  }
+  .hero-title .grad{
+    background:linear-gradient(135deg,var(--cyan) 0%,var(--purple-soft) 60%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .hero-sub{font-size:17px;color:rgba(220,215,255,.9);line-height:1.75;max-width:580px;margin:0 auto}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  .fu{animation:fadeUp .75s ease forwards;opacity:0}
+  .d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}
+
+  /* LAYOUT */
+  .container{max-width:860px;margin:0 auto;padding:0 56px;position:relative;z-index:1}
+  .form-section{padding:80px 0 120px;position:relative;z-index:1}
+
+  /* PROGRESS */
+  .progress-wrap{margin-bottom:48px}
+  .progress-track{height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(to right,var(--cyan),var(--purple-soft));border-radius:2px;transition:width .4s ease;width:0%}
+  .progress-label{font-size:12px;color:rgba(210,205,255,.6);margin-top:10px;letter-spacing:0.05em}
+
+  /* BLOCK */
+  .block{
+    background:var(--card-bg);border:1px solid var(--border);
+    border-radius:12px;padding:40px;margin-bottom:16px;
+    position:relative;overflow:hidden;transition:border-color .3s,background .3s;
+  }
+  .block::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--purple),var(--cyan));
+    opacity:0;transition:opacity .3s;
+  }
+  .block:focus-within::before{opacity:1}
+  .block:focus-within{border-color:rgba(123,47,255,.35);background:rgba(123,47,255,.1)}
+  .block-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:32px}
+  .block-num{
+    width:36px;height:36px;border-radius:50%;flex-shrink:0;
+    border:1px solid var(--purple);background:var(--navy);
+    font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:800;color:var(--purple-soft);
+    display:flex;align-items:center;justify-content:center;margin-top:2px;
+  }
+  .block-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:var(--white);margin-bottom:4px}
+  .block-sub{font-size:13px;color:rgba(210,205,255,.7)}
+
+  /* FIELDS */
+  .field{margin-bottom:28px}
+  .field:last-child{margin-bottom:0}
+  .field-divider{height:1px;background:var(--border);margin:28px 0}
+  label.q{display:block;font-size:14px;font-weight:600;color:var(--white);margin-bottom:12px;line-height:1.4}
+  label.q .req{color:var(--cyan);margin-left:3px;font-weight:400}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+  /* INPUTS */
+  input[type=text],input[type=email],input[type=tel],select,textarea{
+    width:100%;background:rgba(6,0,110,.6);border:1px solid rgba(123,47,255,.25);
+    border-radius:8px;color:var(--white);
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;
+    padding:12px 16px;outline:none;transition:border-color .2s,background .2s;
+    appearance:none;-webkit-appearance:none;
+  }
+  input[type=text]::placeholder,input[type=email]::placeholder,
+  input[type=tel]::placeholder,textarea::placeholder{color:rgba(210,205,255,.4)}
+  input[type=text]:focus,input[type=email]:focus,
+  input[type=tel]:focus,select:focus,textarea:focus{
+    border-color:rgba(123,47,255,.6);background:rgba(6,0,110,.8);
+  }
+  select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237B2FFF' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;
+    padding-right:40px;cursor:pointer;background-color:rgba(6,0,110,.6);
+  }
+  select option{background:#0d00a0;color:var(--white)}
+  textarea{min-height:90px;resize:vertical;line-height:1.6}
+
+  /* OPTIONS */
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:12px 16px;border-radius:8px;
+    border:1px solid rgba(123,47,255,.2);cursor:pointer;
+    font-size:14px;color:rgba(220,215,255,.8);
+    transition:border-color .15s,background .15s,color .15s;
+    line-height:1.45;user-select:none;background:rgba(6,0,110,.3);
+  }
+  .opt:hover{border-color:rgba(123,47,255,.45);background:rgba(123,47,255,.1);color:var(--white)}
+  .opt.selected{border-color:rgba(123,47,255,.6);background:rgba(123,47,255,.15);color:var(--white)}
+  .opt input{display:none}
+  .opt-indicator{
+    width:16px;height:16px;border-radius:50%;
+    border:1px solid rgba(123,47,255,.4);flex-shrink:0;margin-top:2px;
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .15s,background .15s;
+  }
+  .opt.selected .opt-indicator{background:linear-gradient(135deg,var(--purple),var(--cyan));border-color:transparent}
+  .opt-dot{width:5px;height:5px;border-radius:50%;background:white;display:none}
+  .opt.selected .opt-dot{display:block}
+  .opt-indicator.sq{border-radius:4px}
+  .sq.sq-on{background:linear-gradient(135deg,var(--purple),var(--cyan));border-color:transparent}
+
+  .err{font-size:12px;color:#ff6b6b;margin-top:6px;display:none}
+
+  /* SUBMIT */
+  .submit-wrap{margin-top:40px}
+  .btn-submit{
+    width:100%;padding:18px 36px;
+    background:linear-gradient(135deg,var(--purple),var(--purple-soft));
+    color:white;border:none;border-radius:8px;
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;
+    cursor:pointer;transition:all .25s;
+    box-shadow:0 8px 32px rgba(123,47,255,.35);
+  }
+  .btn-submit:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(123,47,255,.5)}
+  .btn-submit:active{transform:scale(.99)}
+  .btn-submit:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+
+  /* RESULT */
+  .result-wrap{
+    margin-top:24px;border:1px solid rgba(123,47,255,.35);
+    border-radius:12px;overflow:hidden;display:none;position:relative;
+  }
+  .result-wrap::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--cyan),var(--purple-soft));
+  }
+  .result-header{background:rgba(123,47,255,.12);border-bottom:1px solid var(--border);padding:36px 40px}
+  .result-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+  .result-header h2{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;color:var(--white);margin-bottom:12px}
+  .result-badge{
+    display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+    background:rgba(0,212,255,.1);color:var(--cyan);border:1px solid rgba(0,212,255,.25);
+    padding:5px 14px;border-radius:100px;
+  }
+  .result-desc{font-size:15px;color:rgba(220,215,255,.85);line-height:1.7;margin-top:14px}
+  .result-body{padding:36px 40px;display:flex;flex-direction:column;gap:36px;background:var(--card-bg)}
+  .result-section-title{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(210,205,255,.6);margin-bottom:14px}
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px}
+  .tag{font-size:13px;padding:6px 14px;border-radius:100px;background:rgba(123,47,255,.12);color:rgba(220,215,255,.85);border:1px solid rgba(123,47,255,.3)}
+  .funnel-steps{display:flex;flex-direction:column}
+  .funnel-step{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px;color:rgba(220,215,255,.85)}
+  .funnel-step:last-child{border-bottom:none}
+  .funnel-step-num{
+    width:26px;height:26px;border-radius:50%;border:1px solid var(--purple);flex-shrink:0;
+    font-family:'Bricolage Grotesque',sans-serif;font-size:12px;font-weight:800;color:var(--purple-soft);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .result-text{font-size:14px;color:rgba(220,215,255,.85);line-height:1.75}
+  .result-text strong{color:var(--white);font-weight:700}
+  .cta-box{border-top:1px solid var(--border);padding:28px 40px;background:rgba(123,47,255,.1);display:flex;align-items:flex-start;gap:16px}
+  .cta-dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple-soft));flex-shrink:0;margin-top:6px}
+  .cta-box-text{font-size:14px;color:rgba(220,215,255,.9);line-height:1.65}
+  .cta-box-text strong{color:var(--white);font-weight:700}
+
+  /* LOADING */
+  .loading{display:flex;align-items:center;gap:14px;padding:32px 40px}
+  .dots{display:flex;gap:5px}
+  .dots span{width:6px;height:6px;border-radius:50%;background:var(--purple-soft);animation:blink 1.4s ease-in-out infinite}
+  .dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+  .loading-text{font-size:14px;color:rgba(210,205,255,.7)}
+
+  /* FOOTER */
+  footer{
+    padding:40px 56px;border-top:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:13px;color:rgba(210,205,255,.7);position:relative;z-index:1;
+  }
+
+  @media(max-width:768px){
+    nav{padding:16px 24px}
+    .nav-product{display:none}
+    .hero{padding:120px 24px 80px}
+    .container{padding:0 24px}
+    .block{padding:24px 20px}
+    .two-col{grid-template-columns:1fr}
+    .result-header,.result-body,.cta-box{padding:24px}
+    footer{flex-direction:column;gap:12px;padding:28px 24px;text-align:center}
+  }
+
+  /* PASSWORD SCREEN */
+  .pw-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 2rem; position: relative; z-index: 1;
+  }
+  .pw-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 48px 40px; width: 100%; max-width: 420px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .pw-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,var(--purple),var(--cyan));
+  }
+  .pw-logo {
+    font-family:'Bricolage Grotesque',sans-serif; font-size:22px; font-weight:800;
+    background:linear-gradient(135deg,var(--cyan),var(--purple-soft));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    margin-bottom: 28px; display:block;
+  }
+  .pw-title {
+    font-family:'Bricolage Grotesque',sans-serif; font-size:20px; font-weight:800;
+    color:var(--white); margin-bottom: 8px; letter-spacing:-0.01em;
+  }
+  .pw-sub { font-size:14px; color:rgba(210,205,255,0.7); margin-bottom:28px; line-height:1.6; }
+  .pw-input-wrap { position:relative; margin-bottom:12px; }
+  .pw-input {
+    width:100%; background:rgba(6,0,110,0.6); border:1px solid rgba(123,47,255,0.25);
+    border-radius:8px; color:var(--white); font-family:'Plus Jakarta Sans',sans-serif;
+    font-size:15px; padding:13px 48px 13px 16px; outline:none;
+    transition:border-color .2s; text-align:center; letter-spacing:0.15em;
+  }
+  .pw-input:focus { border-color:rgba(123,47,255,0.6); }
+  .pw-input::placeholder { color:rgba(210,205,255,0.3); letter-spacing:0; }
+  .pw-toggle {
+    position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    background:none; border:none; cursor:pointer; color:rgba(210,205,255,0.5);
+    padding:0; font-size:16px; line-height:1;
+  }
+  .pw-btn {
+    width:100%; padding:14px; margin-top:4px;
+    background:linear-gradient(135deg,var(--purple),var(--purple-soft));
+    color:white; border:none; border-radius:8px;
+    font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700;
+    cursor:pointer; transition:all .2s;
+    box-shadow:0 8px 32px rgba(123,47,255,0.35);
+  }
+  .pw-btn:hover { transform:translateY(-1px); box-shadow:0 12px 40px rgba(123,47,255,0.5); }
+  .pw-err { font-size:12px; color:#ff6b6b; margin-top:8px; display:none; }
+</style>
+</head>
+<body>
+
+<!-- ─────────────────────────────────── -->
+<!-- SENHA DE ACESSO — altere aqui:    -->
+<script>const SENHA_ACESSO = '1404';</script>
+<!-- ─────────────────────────────────── -->
+
+<!-- PASSWORD SCREEN -->
+<div id="pw-screen" class="pw-screen">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="pw-card">
+    <span class="pw-logo">fost</span>
+    <div class="pw-title">Acesso restrito</div>
+    <p class="pw-sub">Digite a senha enviada pelo seu consultor para acessar o formulário de diagnóstico.</p>
+    <div class="pw-input-wrap">
+      <input class="pw-input" type="password" id="pw-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()"/>
+      <button class="pw-toggle" onclick="togglePw()" tabindex="-1" id="pw-toggle-btn">👁</button>
+    </div>
+    <div class="pw-err" id="pw-err">Senha incorreta. Tente novamente.</div>
+    <button class="pw-btn" onclick="checkPw()">Acessar formulário →</button>
+  </div>
+</div>
+
+<div id="main-content" style="display:none;">
+<nav>
+  <div class="nav-logo">
+    <svg class="nav-logo-icon" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 14 L10 8 L14 12 L20 6 L24 10" stroke="url(#g1)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs><linearGradient id="g1" x1="4" y1="14" x2="24" y2="6" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#9B59FF"/></linearGradient></defs>
+    </svg>
+    <span class="nav-logo-text">fost</span>
+    <span style="color:var(--border);margin:0 8px;">|</span>
+    <span class="nav-product">Diagnóstico Comercial</span>
+  </div>
+  <a href="https://wa.me/5541999352190" target="_blank" rel="noopener" class="nav-cta">Falar pelo WhatsApp</a>
+</nav>
+
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge fu"><span class="hero-badge-dot"></span>Diagnóstico Gratuito · Vendas Estruturadas</div>
+    <h1 class="hero-title fu d1">Como está o seu<br><span class="grad">processo comercial</span><br>hoje?</h1>
+    <p class="hero-sub fu d2">Responda com honestidade. Sem respostas certas ou erradas.<br>Quanto mais preciso você for, mais útil será o diagnóstico.</p>
+  </div>
+</section>
+
+<div class="form-section">
+  <div class="container">
+
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+      <div class="progress-label" id="progress-label">0 de 5 blocos preenchidos</div>
+    </div>
+
+    <div id="form-area">
+
+      <!-- 0: DADOS -->
+      <div class="block">
+        <div class="block-header">
+          <div class="block-num">—</div>
+          <div>
+            <div class="block-title">Sobre a empresa</div>
+            <div class="block-sub">Dados básicos para contextualizar o diagnóstico</div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="field"><label class="q" for="nome">Nome<span class="req">*</span></label><input type="text" id="nome" placeholder="Seu nome completo"/><div class="err" id="err-nome">Campo obrigatório</div></div>
+          <div class="field"><label class="q" for="empresa">Empresa<span class="req">*</span></label><input type="text" id="empresa" placeholder="Nome da empresa"/><div class="err" id="err-empresa">Campo obrigatório</div></div>
+        </div>
+        <div class="two-col">
+          <div class="field"><label class="q" for="email">E-mail<span class="req">*</span></label><input type="email" id="email" placeholder="seu@email.com"/><div class="err" id="err-email">E-mail inválido</div></div>
+          <div class="field"><label class="q" for="telefone">WhatsApp<span class="req">*</span></label><input type="tel" id="telefone" placeholder="(00) 00000-0000"/><div class="err" id="err-telefone">Campo obrigatório</div></div>
+        </div>
+        <div class="two-col">
+          <div class="field"><label class="q" for="cnpj">CNPJ<span class="req">*</span></label><input type="text" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18" oninput="maskCNPJ(this)"/><div class="err" id="err-cnpj">Campo obrigatório</div></div>
+          <div class="field"><label class="q" for="site">Site</label><input type="text" id="site" placeholder="www.seusite.com.br"/></div>
+        </div>
+        <div class="two-col">
+          <div class="field">
+            <label class="q" for="faturamento">Faturamento mensal aproximado</label>
+            <div style="position:relative;">
+              <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:13px;color:rgba(210,205,255,0.5);pointer-events:none;z-index:1;">R$</span>
+              <input type="text" id="faturamento" placeholder="0,00" style="padding-left:36px;" oninput="maskMoeda(this)"/>
+            </div>
+          </div>
+          <div class="field">
+            <label class="q" for="ticket">Ticket médio de venda</label>
+            <div style="position:relative;">
+              <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:13px;color:rgba(210,205,255,0.5);pointer-events:none;z-index:1;">R$</span>
+              <input type="text" id="ticket" placeholder="0,00" style="padding-left:36px;" oninput="maskMoeda(this)"/>
+            </div>
+          </div>
+        </div>
+        <div class="field"><label class="q" for="vendedores">Quantos vendedores atuam hoje (incluindo você)?</label><select id="vendedores"><option value="">Selecione</option><option value="1">Só eu</option><option value="2-3">2 a 3</option><option value="4-8">4 a 8</option><option value="9+">Mais de 8</option></select></div>
+
+        <div class="field">
+          <label class="q" for="perfil_cliente">Para quem você vende? (perfil do cliente ideal)<span class="req">*</span></label>
+          <textarea id="perfil_cliente" placeholder="Ex: empresas B2B com faturamento acima de R$ 500k, setor de tecnologia, com time de vendas entre 3 e 10 pessoas, que já tentaram estruturar processos mas ainda dependem do fundador..." style="min-height:120px;"></textarea>
+          <div class="err" id="err-perfil_cliente">Campo obrigatório</div>
+        </div>
+
+
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Setor do negócio (pode marcar mais de um)</label>
+          <div class="opts">
+            <label class="opt" data-g="q_setor" data-c="1"><input type="checkbox" name="q_setor" value="tecnologia"/><span class="opt-indicator sq"></span><span>Tecnologia / SaaS</span></label>
+            <label class="opt" data-g="q_setor" data-c="1"><input type="checkbox" name="q_setor" value="servicos_profissionais"/><span class="opt-indicator sq"></span><span>Serviços profissionais (consultoria, agência, jurídico, contabilidade)</span></label>
+            <label class="opt" data-g="q_setor" data-c="1"><input type="checkbox" name="q_setor" value="industria"/><span class="opt-indicator sq"></span><span>Indústria / manufatura</span></label>
+            <label class="opt" data-g="q_setor" data-c="1"><input type="checkbox" name="q_setor" value="saude"/><span class="opt-indicator sq"></span><span>Saúde</span></label>
+            <label class="opt" data-g="q_setor" data-c="1"><input type="checkbox" name="q_setor" value="educacao"/><span class="opt-indicator sq"></span><span>Educação</span></label>
+            <label class="opt" data-g="q_setor" data-c="1"><input type="checkbox" name="q_setor" value="financeiro"/><span class="opt-indicator sq"></span><span>Financeiro / fintechs</span></label>
+            <label class="opt" data-g="q_setor" data-c="1"><input type="checkbox" name="q_setor" value="varejo"/><span class="opt-indicator sq"></span><span>Varejo / e-commerce</span></label>
+            <label class="opt" data-g="q_setor" data-c="1"><input type="checkbox" name="q_setor" value="construcao"/><span class="opt-indicator sq"></span><span>Construção / imobiliário</span></label>
+            <label class="opt" data-g="q_setor" data-c="1"><input type="checkbox" name="q_setor" value="logistica"/><span class="opt-indicator sq"></span><span>Logística / transporte</span></label>
+            <label class="opt" data-g="q_setor" data-c="1"><input type="checkbox" name="q_setor" value="outro_setor"/><span class="opt-indicator sq"></span><span>Outro</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 0b: MONETIZAÇÃO -->
+      <div class="block">
+        <div class="block-header">
+          <div class="block-num">—</div>
+          <div>
+            <div class="block-title">Modelo de monetização</div>
+            <div class="block-sub">Como a empresa gera receita hoje</div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="q">Como a empresa cobra pelo produto ou serviço?<span class="req">*</span></label>
+          <div class="opts">
+            <label class="opt" data-g="q_monetizacao"><input type="radio" name="q_monetizacao" value="assinatura"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Assinatura (recorrência mensal / anual)</span></label>
+            <label class="opt" data-g="q_monetizacao"><input type="radio" name="q_monetizacao" value="usage_based"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Usage based — conforme o uso do produto</span></label>
+            <label class="opt" data-g="q_monetizacao"><input type="radio" name="q_monetizacao" value="take_rate"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Take rate — % sobre transações</span></label>
+            <label class="opt" data-g="q_monetizacao"><input type="radio" name="q_monetizacao" value="venda_unica"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Venda única</span></label>
+            <label class="opt" data-g="q_monetizacao"><input type="radio" name="q_monetizacao" value="hora_diaria"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Hora / diária</span></label>
+            <label class="opt" data-g="q_monetizacao"><input type="radio" name="q_monetizacao" value="projeto_fechado"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Projeto fechado</span></label>
+            <label class="opt" data-g="q_monetizacao"><input type="radio" name="q_monetizacao" value="comissao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Comissão</span></label>
+            <label class="opt" data-g="q_monetizacao"><input type="radio" name="q_monetizacao" value="locacao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Locação</span></label>
+            <label class="opt" data-g="q_monetizacao"><input type="radio" name="q_monetizacao" value="licenciamento"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Licenciamento</span></label>
+            <label class="opt" data-g="q_monetizacao"><input type="radio" name="q_monetizacao" value="outros"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Outros</span></label>
+          </div>
+          <div id="outros-wrap" style="display:none;margin-top:10px;">
+            <input type="text" id="monetizacao_outros" placeholder="Descreva o modelo de monetização..."/>
+          </div>
+          <div class="err" id="err-q_monetizacao">Selecione uma opção</div>
+        </div>
+      </div>
+
+      <!-- 1: MODELO -->
+      <div class="block">
+        <div class="block-header"><div class="block-num">01</div><div><div class="block-title">Modelo de vendas atual</div><div class="block-sub">Como a empresa vende hoje</div></div></div>
+        <div class="field">
+          <label class="q">Quem é o principal responsável por vender hoje?<span class="req">*</span></label>
+          <div class="opts">
+            <label class="opt" data-g="q_quem_vende"><input type="radio" name="q_quem_vende" value="dono_sozinho"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>O dono / fundador, sem apoio de vendedores</span></label>
+            <label class="opt" data-g="q_quem_vende"><input type="radio" name="q_quem_vende" value="dono_e_vendedor"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Dono + pelo menos 1 vendedor, mas o dono ainda centraliza</span></label>
+            <label class="opt" data-g="q_quem_vende"><input type="radio" name="q_quem_vende" value="time_independente"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Time comercial que opera com autonomia</span></label>
+            <label class="opt" data-g="q_quem_vende"><input type="radio" name="q_quem_vende" value="nao_definido"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Qualquer pessoa disponível — não há responsável claro</span></label>
+          </div>
+          <div class="err" id="err-q_quem_vende">Selecione uma opção</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Como os leads chegam para vocês hoje? (pode marcar mais de um)</label>
+          <div class="opts">
+            <label class="opt" data-g="q_leads" data-c="1"><input type="checkbox" name="q_leads" value="indicacao"/><span class="opt-indicator sq"></span><span>Indicação / boca a boca</span></label>
+            <label class="opt" data-g="q_leads" data-c="1"><input type="checkbox" name="q_leads" value="prospeccao"/><span class="opt-indicator sq"></span><span>Prospecção ativa (cold call, cold email, LinkedIn)</span></label>
+            <label class="opt" data-g="q_leads" data-c="1"><input type="checkbox" name="q_leads" value="inbound"/><span class="opt-indicator sq"></span><span>Marketing / inbound (conteúdo, SEO, anúncios)</span></label>
+            <label class="opt" data-g="q_leads" data-c="1"><input type="checkbox" name="q_leads" value="parceiros"/><span class="opt-indicator sq"></span><span>Parceiros ou revendedores</span></label>
+            <label class="opt" data-g="q_leads" data-c="1"><input type="checkbox" name="q_leads" value="inconsistente"/><span class="opt-indicator sq"></span><span>Não é consistente / não consigo identificar a origem</span></label>
+          </div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Como você descreveria o seu processo de vendas hoje?<span class="req">*</span></label>
+          <div class="opts">
+            <label class="opt" data-g="q_processo"><input type="radio" name="q_processo" value="feeling"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>No feeling — cada venda é diferente, sem padrão definido</span></label>
+            <label class="opt" data-g="q_processo"><input type="radio" name="q_processo" value="mental"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Existe um processo, mas está na cabeça do dono — não é replicável</span></label>
+            <label class="opt" data-g="q_processo"><input type="radio" name="q_processo" value="parcial"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Processo parcialmente documentado, seguido às vezes</span></label>
+            <label class="opt" data-g="q_processo"><input type="radio" name="q_processo" value="documentado"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Processo claro, documentado e seguido pelo time</span></label>
+          </div>
+          <div class="err" id="err-q_processo">Selecione uma opção</div>
+        </div>
+      </div>
+
+      <!-- 2: FUNIL -->
+      <div class="block">
+        <div class="block-header"><div class="block-num">02</div><div><div class="block-title">Processo comercial</div><div class="block-sub">Se existe funil real e estrutura de pipeline</div></div></div>
+        <div class="field">
+          <label class="q">Sua empresa tem etapas definidas no funil de vendas?<span class="req">*</span></label>
+          <div class="opts">
+            <label class="opt" data-g="q_funil"><input type="radio" name="q_funil" value="nao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não existe funil definido</span></label>
+            <label class="opt" data-g="q_funil"><input type="radio" name="q_funil" value="informal"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Existe informalmente, mas não é seguido na prática</span></label>
+            <label class="opt" data-g="q_funil"><input type="radio" name="q_funil" value="parcial"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Existe e é parcialmente seguido pelo time</span></label>
+            <label class="opt" data-g="q_funil"><input type="radio" name="q_funil" value="sim"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Sim, funil com etapas claras seguido pelo time</span></label>
+          </div>
+          <div class="err" id="err-q_funil">Selecione uma opção</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Existe um critério claro para avançar um lead de uma etapa para a próxima?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_criterio"><input type="radio" name="q_criterio" value="nao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não — avançamos quando parece certo</span></label>
+            <label class="opt" data-g="q_criterio"><input type="radio" name="q_criterio" value="parcial"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Às vezes, depende do vendedor</span></label>
+            <label class="opt" data-g="q_criterio"><input type="radio" name="q_criterio" value="sim"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Sim, existe critério definido e conhecido pelo time</span></label>
+          </div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Em média, quanto tempo demora do primeiro contato ao fechamento?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_ciclo"><input type="radio" name="q_ciclo" value="semana"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Até 1 semana</span></label>
+            <label class="opt" data-g="q_ciclo"><input type="radio" name="q_ciclo" value="mes"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>1 a 4 semanas</span></label>
+            <label class="opt" data-g="q_ciclo"><input type="radio" name="q_ciclo" value="trimestre"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>1 a 3 meses</span></label>
+            <label class="opt" data-g="q_ciclo"><input type="radio" name="q_ciclo" value="mais"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Mais de 3 meses</span></label>
+            <label class="opt" data-g="q_ciclo"><input type="radio" name="q_ciclo" value="nao_sei"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não sei / não medimos</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3: EXECUÇÃO -->
+      <div class="block">
+        <div class="block-header"><div class="block-num">03</div><div><div class="block-title">Execução e rotina</div><div class="block-sub">Consistência na operação comercial</div></div></div>
+        <div class="field">
+          <label class="q">Existe uma rotina comercial definida (reuniões de pipeline, follow-ups, metas)?<span class="req">*</span></label>
+          <div class="opts">
+            <label class="opt" data-g="q_rotina"><input type="radio" name="q_rotina" value="nao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não existe rotina — as coisas acontecem quando surgem</span></label>
+            <label class="opt" data-g="q_rotina"><input type="radio" name="q_rotina" value="informal"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Existe de forma informal, sem frequência definida</span></label>
+            <label class="opt" data-g="q_rotina"><input type="radio" name="q_rotina" value="parcial"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Existe parcialmente — algumas coisas têm ritmo, outras não</span></label>
+            <label class="opt" data-g="q_rotina"><input type="radio" name="q_rotina" value="sim"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Sim, rotina clara com cadência semanal definida</span></label>
+          </div>
+          <div class="err" id="err-q_rotina">Selecione uma opção</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Em média, quantas oportunidades ativas o time acompanha por semana?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_opps"><input type="radio" name="q_opps" value="menos5"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Menos de 5</span></label>
+            <label class="opt" data-g="q_opps"><input type="radio" name="q_opps" value="5-15"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>5 a 15</span></label>
+            <label class="opt" data-g="q_opps"><input type="radio" name="q_opps" value="15-40"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>15 a 40</span></label>
+            <label class="opt" data-g="q_opps"><input type="radio" name="q_opps" value="mais40"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Mais de 40</span></label>
+            <label class="opt" data-g="q_opps"><input type="radio" name="q_opps" value="nao_sei"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não sei / não acompanhamos</span></label>
+          </div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Como é feito o acompanhamento (follow-up) das oportunidades?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_followup"><input type="radio" name="q_followup" value="nao_tem"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não fazemos follow-up de forma sistemática</span></label>
+            <label class="opt" data-g="q_followup"><input type="radio" name="q_followup" value="memoria"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Depende da memória do vendedor</span></label>
+            <label class="opt" data-g="q_followup"><input type="radio" name="q_followup" value="planilha"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Usamos planilha ou lista de tarefas manuais</span></label>
+            <label class="opt" data-g="q_followup"><input type="radio" name="q_followup" value="crm"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>CRM com tarefas e lembretes automáticos</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4: FERRAMENTAS -->
+      <div class="block">
+        <div class="block-header"><div class="block-num">04</div><div><div class="block-title">Ferramentas e dados</div><div class="block-sub">Visibilidade e controle da operação</div></div></div>
+        <div class="field">
+          <label class="q">Vocês usam algum CRM?<span class="req">*</span></label>
+          <div class="opts">
+            <label class="opt" data-g="q_crm"><input type="radio" name="q_crm" value="nao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não usamos nenhuma ferramenta de controle</span></label>
+            <label class="opt" data-g="q_crm"><input type="radio" name="q_crm" value="planilha"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Planilha (Excel / Google Sheets)</span></label>
+            <label class="opt" data-g="q_crm"><input type="radio" name="q_crm" value="crm_basico"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>CRM básico (Pipedrive, HubSpot gratuito, RD CRM etc.)</span></label>
+            <label class="opt" data-g="q_crm"><input type="radio" name="q_crm" value="crm_avancado"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>CRM robusto com automações configuradas</span></label>
+          </div>
+          <div class="err" id="err-q_crm">Selecione uma opção</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Quais métricas de vendas você acompanha hoje? (pode marcar mais de um)</label>
+          <div class="opts">
+            <label class="opt" data-g="q_metricas" data-c="1"><input type="checkbox" name="q_metricas" value="conversao"/><span class="opt-indicator sq"></span><span>Taxa de conversão (% de leads que fecham)</span></label>
+            <label class="opt" data-g="q_metricas" data-c="1"><input type="checkbox" name="q_metricas" value="ciclo"/><span class="opt-indicator sq"></span><span>Ciclo médio de vendas (tempo de fechamento)</span></label>
+            <label class="opt" data-g="q_metricas" data-c="1"><input type="checkbox" name="q_metricas" value="ticket"/><span class="opt-indicator sq"></span><span>Ticket médio por vendedor</span></label>
+            <label class="opt" data-g="q_metricas" data-c="1"><input type="checkbox" name="q_metricas" value="pipeline"/><span class="opt-indicator sq"></span><span>Valor total do pipeline aberto</span></label>
+            <label class="opt" data-g="q_metricas" data-c="1"><input type="checkbox" name="q_metricas" value="nenhuma"/><span class="opt-indicator sq"></span><span>Não acompanho métricas de vendas</span></label>
+          </div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Você sabe quantas oportunidades precisa abrir para fechar uma venda?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_sabe_conversao"><input type="radio" name="q_sabe_conversao" value="nao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não tenho essa visibilidade</span></label>
+            <label class="opt" data-g="q_sabe_conversao"><input type="radio" name="q_sabe_conversao" value="aproximado"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Tenho uma ideia aproximada</span></label>
+            <label class="opt" data-g="q_sabe_conversao"><input type="radio" name="q_sabe_conversao" value="sim"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Sim, sei com precisão e acompanho regularmente</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5: CONTEXTO -->
+      <div class="block">
+        <div class="block-header"><div class="block-num">05</div><div><div class="block-title">Contexto e prioridade</div><div class="block-sub">Para entender onde focar primeiro</div></div></div>
+        <div class="field">
+          <label class="q">Qual é o maior problema comercial que você quer resolver agora?<span class="req">*</span></label>
+          <div class="opts">
+            <label class="opt" data-g="q_maior_problema"><input type="radio" name="q_maior_problema" value="previsibilidade"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Falta de previsibilidade — não sei o que vai fechar no mês</span></label>
+            <label class="opt" data-g="q_maior_problema"><input type="radio" name="q_maior_problema" value="escala"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Preciso escalar vendas sem depender de mim</span></label>
+            <label class="opt" data-g="q_maior_problema"><input type="radio" name="q_maior_problema" value="perda"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Estou perdendo oportunidades no meio do caminho</span></label>
+            <label class="opt" data-g="q_maior_problema"><input type="radio" name="q_maior_problema" value="conversao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Taxa de conversão muito baixa — gasto energia e não fecha</span></label>
+            <label class="opt" data-g="q_maior_problema"><input type="radio" name="q_maior_problema" value="time"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>O time não executa bem sem minha supervisão constante</span></label>
+          </div>
+          <div class="err" id="err-q_maior_problema">Selecione uma opção</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q" for="contexto">Algo mais que você queira compartilhar sobre o momento da empresa?</label>
+          <textarea id="contexto" placeholder="Ex: acabamos de contratar dois vendedores, crescemos muito rápido e o processo não acompanhou..."></textarea>
+        </div>
+      </div>
+
+      <div class="submit-wrap">
+        <button class="btn-submit" id="btn-submit" onclick="submitForm()">Gerar meu diagnóstico →</button>
+      </div>
+
+      <div class="result-wrap" id="result-wrap">
+        <div class="loading" id="result-loading">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <span class="loading-text">Analisando suas respostas...</span>
+        </div>
+        <div id="result-content" style="display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TELA DE AGRADECIMENTO -->
+<div id="thankyou" style="display:none; max-width:860px; margin:0 auto; padding:100px 56px; text-align:center; position:relative; z-index:1;">
+  <div style="width:64px;height:64px;border-radius:50%;border:1px solid rgba(123,47,255,0.4);background:rgba(123,47,255,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;">
+    <svg width="24" height="20" viewBox="0 0 24 20" fill="none"><path d="M2 10L9 17L22 3" stroke="url(#gc)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="gc" x1="2" y1="10" x2="22" y2="3" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#9B59FF"/></linearGradient></defs></svg>
+  </div>
+  <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(26px,3.5vw,38px);font-weight:800;letter-spacing:-0.02em;margin-bottom:1rem;">Respostas recebidas!</h2>
+  <p style="font-size:16px;color:rgba(220,215,255,0.85);line-height:1.75;max-width:480px;margin:0 auto 2.5rem;">Obrigado por preencher o diagnóstico. Vou analisar suas respostas e entrar em contato em breve com os próximos passos.</p>
+  <a href="https://wa.me/5541999352190" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#7B2FFF,#9B59FF);color:white;text-decoration:none;padding:14px 28px;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.02em;box-shadow:0 8px 32px rgba(123,47,255,0.35);">Falar pelo WhatsApp →</a>
+</div>
+
+
+<footer>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--purple-soft));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">fost</span>
+    <span style="color:var(--border);">|</span>
+    <span>Vendas Estruturadas</span>
+  </div>
+  <span>Programa de Implantação Comercial B2B</span>
+</footer>
+
+<script>
+// Password gate
+function checkPw() {
+  const val = document.getElementById('pw-input').value.trim();
+  if (val === SENHA_ACESSO) {
+    document.getElementById('pw-screen').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    const err = document.getElementById('pw-err');
+    err.style.display = 'block';
+    document.getElementById('pw-input').style.borderColor = 'rgba(255,107,107,0.6)';
+    setTimeout(() => {
+      err.style.display = 'none';
+      document.getElementById('pw-input').style.borderColor = 'rgba(123,47,255,0.25)';
+    }, 3000);
+  }
+}
+function togglePw() {
+  const inp = document.getElementById('pw-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+document.querySelectorAll('.opt[data-g]').forEach(opt => {
+  const isCheck = opt.dataset.c === '1';
+  if (isCheck) {
+    opt.addEventListener('click', function(e) {
+      e.preventDefault();
+      const inp = this.querySelector('input');
+      inp.checked = !inp.checked;
+      const ind = this.querySelector('.opt-indicator');
+      if (inp.checked) { this.classList.add('selected'); ind.classList.add('sq-on'); }
+      else { this.classList.remove('selected'); ind.classList.remove('sq-on'); }
+    });
+  } else {
+    opt.addEventListener('click', function() {
+      const g = this.dataset.g;
+      document.querySelectorAll(`.opt[data-g="${g}"]`).forEach(o => o.classList.remove('selected'));
+      this.querySelector('input').checked = true;
+      this.classList.add('selected');
+      updateProgress();
+      // show/hide "outros" field
+      if(g==='q_monetizacao'){
+        document.getElementById('outros-wrap').style.display=
+          this.querySelector('input').value==='outros'?'block':'none';
+      }
+    });
+  }
+});
+
+function handleLogoSelect(input) {
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    if (file.size > 5 * 1024 * 1024) { alert('Arquivo muito grande. Máximo 5MB.'); return; }
+    document.getElementById('logo-label').innerHTML =
+      '<span style="color:rgba(155,89,255,0.9);">✓ ' + file.name + '</span>';
+    document.getElementById('logo-drop').style.borderColor = 'rgba(123,47,255,0.7)';
+    document.getElementById('logo-drop').style.background = 'rgba(123,47,255,0.1)';
+  }
+}
+
+function handleLogoDrop(e) {
+  e.preventDefault();
+  const dt = e.dataTransfer;
+  if (dt.files && dt.files[0]) {
+    document.getElementById('logo').files = dt.files;
+    handleLogoSelect(document.getElementById('logo'));
+  }
+  e.currentTarget.style.borderColor = 'rgba(123,47,255,0.35)';
+}
+
+function updateProgress() {
+  const req = ['q_quem_vende','q_processo','q_funil','q_rotina','q_crm','q_maior_problema'];
+  const filled = req.filter(n => !!getRadio(n)).length;
+  document.getElementById('progress').style.width = Math.round(filled/req.length*100)+'%';
+  document.getElementById('progress-label').textContent = filled+' de '+req.length+' blocos preenchidos';
+}
+
+function getRadio(n){const e=document.querySelector(`input[name="${n}"]:checked`);return e?e.value:''}
+function getChecks(n){return Array.from(document.querySelectorAll(`input[name="${n}"]:checked`)).map(i=>i.value)}
+function showErr(id,s){const e=document.getElementById('err-'+id);if(e)e.style.display=s?'block':'none'}
+function validEmail(v){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
+
+function maskMoeda(el){
+  let v=el.value.replace(/\D/g,'');
+  if(!v){el.value='';return;}
+  v=(parseInt(v)/100).toFixed(2);
+  el.value=v.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
+
+function maskCNPJ(el){
+  let v=el.value.replace(/\D/g,'').slice(0,14);
+  v=v.replace(/^(\d{2})(\d)/,'$1.$2');
+  v=v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');
+  v=v.replace(/\.((\d{3}))(\d)/,'.$1/$3');
+  v=v.replace(/(\d{4})(\d)/,'$1-$2');
+  el.value=v;
+}
+
+function validate(){
+  let ok=true;
+  const nome=document.getElementById('nome').value.trim();
+  const empresa=document.getElementById('empresa').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const telefone=document.getElementById('telefone').value.trim();
+  const cnpj=document.getElementById('cnpj').value.trim();
+  showErr('nome',!nome);if(!nome)ok=false;
+  showErr('empresa',!empresa);if(!empresa)ok=false;
+  showErr('email',!validEmail(email));if(!validEmail(email))ok=false;
+  showErr('telefone',!telefone);if(!telefone)ok=false;
+  showErr('cnpj',!cnpj);if(!cnpj)ok=false;
+  const perfil_cliente=document.getElementById('perfil_cliente').value.trim();
+  showErr('perfil_cliente',!perfil_cliente);if(!perfil_cliente)ok=false;
+  ['q_monetizacao','q_quem_vende','q_processo','q_funil','q_rotina','q_crm','q_maior_problema'].forEach(f=>{
+    const v=getRadio(f);showErr(f,!v);if(!v)ok=false;
+  });
+  return ok;
+}
+
+function collectData(){
+  const mon=getRadio('q_monetizacao');
+  const monOutros=mon==='outros'?document.getElementById('monetizacao_outros').value.trim():'';
+  return{
+    nome:document.getElementById('nome').value.trim(),
+    empresa:document.getElementById('empresa').value.trim(),
+    email:document.getElementById('email').value.trim(),
+    telefone:document.getElementById('telefone').value.trim(),
+    cnpj:document.getElementById('cnpj').value.trim(),
+    perfil_cliente:document.getElementById('perfil_cliente').value.trim(),
+    site:document.getElementById('site').value.trim(),
+    faturamento:'R$ '+document.getElementById('faturamento').value,
+    ticket:'R$ '+document.getElementById('ticket').value,
+    vendedores:document.getElementById('vendedores').value,
+    setor:getChecks('q_setor').join(', '),
+    monetizacao:mon+(monOutros?' — '+monOutros:''),
+    quem_vende:getRadio('q_quem_vende'),
+    leads:getChecks('q_leads').join(', '),
+    processo:getRadio('q_processo'),
+    funil:getRadio('q_funil'),
+    criterio:getRadio('q_criterio'),
+    ciclo:getRadio('q_ciclo'),
+    rotina:getRadio('q_rotina'),
+    opps:getRadio('q_opps'),
+    followup:getRadio('q_followup'),
+    crm:getRadio('q_crm'),
+    metricas:getChecks('q_metricas').join(', '),
+    sabe_conversao:getRadio('q_sabe_conversao'),
+    maior_problema:getRadio('q_maior_problema'),
+    contexto:document.getElementById('contexto').value.trim()
+  };
+}
+
+const FORMSPREE_URL = 'https://formspree.io/f/mpqbwewq';
+
+async function submitForm(){
+  if(!validate()){
+    document.querySelector('.err[style*="block"]')?.closest('.block')?.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  const btn=document.getElementById('btn-submit');
+  btn.disabled=true;
+  btn.textContent='Enviando...';
+
+  const data=collectData();
+
+  // Build JSON payload
+  const payload = {
+    _replyto:         data.email,
+    _subject:         'Novo diagnóstico: ' + data.empresa,
+    Nome:             data.nome,
+    Empresa:          data.empresa,
+    Email:            data.email,
+    WhatsApp:         data.telefone,
+    CNPJ:             data.cnpj,
+    Site:             data.site,
+    Faturamento:      data.faturamento,
+    'Ticket médio':   data.ticket,
+    Vendedores:       data.vendedores,
+    Setor:            data.setor,
+    'Monetização':    data.monetizacao,
+    'Perfil cliente': data.perfil_cliente,
+    'Quem vende':     data.quem_vende,
+    Leads:            data.leads,
+    Processo:         data.processo,
+    Funil:            data.funil,
+    'Critério avanço':data.criterio,
+    'Ciclo vendas':   data.ciclo,
+    Rotina:           data.rotina,
+    'Opps por semana':data.opps,
+    'Follow-up':      data.followup,
+    CRM:              data.crm,
+    'Métricas':       data.metricas,
+    'Sabe conversão': data.sabe_conversao,
+    'Maior problema': data.maior_problema,
+    Contexto:         data.contexto,
+    'Data envio':     new Date().toLocaleString('pt-BR'),
+  };
+
+  try{
+    const res = await fetch(FORMSPREE_URL, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if(!res.ok) {
+      const err = await res.json().catch(()=>({}));
+      throw new Error('Formspree error: ' + res.status + ' ' + JSON.stringify(err));
+    }
+  } catch(e) {
+    console.warn('Formspree erro:', e);
+    btn.disabled=false;
+    btn.textContent='Gerar meu diagnóstico →';
+    alert('Erro ao enviar. Verifique sua conexão e tente novamente.');
+    return;
+  }
+
+  document.getElementById('form-area').style.display = 'none';
+  document.getElementById('thankyou').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+updateProgress();
+</script>
+</div>
+</body>
+</html>
