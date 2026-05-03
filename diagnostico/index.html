@@ -358,7 +358,7 @@
 
     <div class="progress-wrap">
       <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
-      <div class="progress-label" id="progress-label">0 de 5 blocos preenchidos</div>
+      <div class="progress-label" id="progress-label">0 de 9 blocos preenchidos</div>
     </div>
 
     <div id="form-area">
@@ -621,6 +621,143 @@
         </div>
       </div>
 
+      <!-- 6: INTELIGÊNCIA COMERCIAL -->
+      <div class="block">
+        <div class="block-header"><div class="block-num">06</div><div><div class="block-title">Inteligência comercial</div><div class="block-sub">O que acontece nas reuniões, nos fechamentos e nas perdas</div></div></div>
+        <div class="field">
+          <label class="q" for="ultimo_fechado">Descreva o último negócio que você fechou — como começou, o que aconteceu e por que ele comprou<span class="req">*</span></label>
+          <textarea id="ultimo_fechado" style="min-height:100px;" placeholder="Ex: veio por indicação de um cliente, fizemos duas reuniões, ele tinha urgência porque o vendedor havia saído, fechou em 3 semanas..."></textarea>
+          <div class="err" id="err-ultimo_fechado">Campo obrigatório</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q" for="ultimo_perdido">Descreva o último negócio que você perdeu — o que aconteceu e por que você acha que não fechou<span class="req">*</span></label>
+          <textarea id="ultimo_perdido" style="min-height:100px;" placeholder="Ex: ficou em negociação por 2 meses, a empresa pediu desconto, demos mas mesmo assim escolheram o concorrente..."></textarea>
+          <div class="err" id="err-ultimo_perdido">Campo obrigatório</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q" for="objecoes_comuns">Quais são as 3 objeções que você mais ouve nas reuniões de vendas?<span class="req">*</span></label>
+          <textarea id="objecoes_comuns" placeholder="Ex: 'está caro', 'preciso pensar', 'já temos um fornecedor'..."></textarea>
+          <div class="err" id="err-objecoes_comuns">Campo obrigatório</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q" for="respostas_objecoes">O que você já tentou responder a essas objeções? O que funcionou ou não funcionou?</label>
+          <textarea id="respostas_objecoes" placeholder="Isso ajuda a construir respostas reais, não genéricas"></textarea>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Qual o maior motivo de perda de negócio hoje?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_motivo_perda"><input type="radio" name="q_motivo_perda" value="preco"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Preço — cliente acha caro ou encontra mais barato</span></label>
+            <label class="opt" data-g="q_motivo_perda"><input type="radio" name="q_motivo_perda" value="concorrente"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Concorrente — preferem outra solução</span></label>
+            <label class="opt" data-g="q_motivo_perda"><input type="radio" name="q_motivo_perda" value="indecisao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Indecisão — ficam na dúvida e somem</span></label>
+            <label class="opt" data-g="q_motivo_perda"><input type="radio" name="q_motivo_perda" value="urgencia"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Baixa urgência — não é prioridade agora</span></label>
+            <label class="opt" data-g="q_motivo_perda"><input type="radio" name="q_motivo_perda" value="followup"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Falta de follow-up — a gente não retomou a tempo</span></label>
+            <label class="opt" data-g="q_motivo_perda"><input type="radio" name="q_motivo_perda" value="nao_sei_perda"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não sei — as oportunidades somem sem retorno</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7: PROPOSTA E PRECIFICAÇÃO -->
+      <div class="block">
+        <div class="block-header"><div class="block-num">07</div><div><div class="block-title">Proposta e precificação</div><div class="block-sub">Como você apresenta e negocia o valor</div></div></div>
+        <div class="field">
+          <label class="q">Como é estruturada sua proposta hoje?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_proposta_estrutura"><input type="radio" name="q_proposta_estrutura" value="nao_tem"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não tenho proposta formal — apresento verbalmente ou por WhatsApp</span></label>
+            <label class="opt" data-g="q_proposta_estrutura"><input type="radio" name="q_proposta_estrutura" value="simples"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Documento simples com escopo e valor (Word, PDF básico)</span></label>
+            <label class="opt" data-g="q_proposta_estrutura"><input type="radio" name="q_proposta_estrutura" value="apresentacao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Apresentação estruturada (deck, PDF com design)</span></label>
+            <label class="opt" data-g="q_proposta_estrutura"><input type="radio" name="q_proposta_estrutura" value="proposta_interativa"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Proposta interativa (PandaDoc, Proposify ou similar)</span></label>
+          </div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q" for="modelo_precificacao">Como você precifica? (descreva o modelo de cobrança)<span class="req">*</span></label>
+          <textarea id="modelo_precificacao" placeholder="Ex: fee mensal fixo de R$ X, % sobre o resultado, por projeto fechado, tabela por serviço..."></textarea>
+          <div class="err" id="err-modelo_precificacao">Campo obrigatório</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Você dá desconto? Se sim, qual a política?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_desconto"><input type="radio" name="q_desconto" value="nao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não dou desconto</span></label>
+            <label class="opt" data-g="q_desconto"><input type="radio" name="q_desconto" value="caso_a_caso"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Dou caso a caso, sem critério definido</span></label>
+            <label class="opt" data-g="q_desconto"><input type="radio" name="q_desconto" value="limite_proprio"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Tenho um limite que decido sozinho (ex: até 10%)</span></label>
+            <label class="opt" data-g="q_desconto"><input type="radio" name="q_desconto" value="politica_formal"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Existe política formal com níveis de aprovação</span></label>
+          </div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Qual o prazo médio entre proposta enviada e resposta do cliente?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_prazo_proposta"><input type="radio" name="q_prazo_proposta" value="dias"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Poucos dias (até 1 semana)</span></label>
+            <label class="opt" data-g="q_prazo_proposta"><input type="radio" name="q_prazo_proposta" value="semanas"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>1 a 4 semanas</span></label>
+            <label class="opt" data-g="q_prazo_proposta"><input type="radio" name="q_prazo_proposta" value="meses"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Mais de 1 mês</span></label>
+            <label class="opt" data-g="q_prazo_proposta"><input type="radio" name="q_prazo_proposta" value="nao_voltam"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Muitos não respondem — a proposta morre sem retorno</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8: PÓS-VENDA -->
+      <div class="block">
+        <div class="block-header"><div class="block-num">08</div><div><div class="block-title">Pós-venda e retenção</div><div class="block-sub">O que acontece depois que o cliente fecha</div></div></div>
+        <div class="field">
+          <label class="q">Como funciona o onboarding do cliente hoje?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_onboarding"><input type="radio" name="q_onboarding" value="nao_tem"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não tem processo definido — cada entrada é diferente</span></label>
+            <label class="opt" data-g="q_onboarding"><input type="radio" name="q_onboarding" value="informal"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Existe informalmente — uma conversa ou reunião inicial</span></label>
+            <label class="opt" data-g="q_onboarding"><input type="radio" name="q_onboarding" value="kickoff"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Fazemos reunião de kickoff estruturada</span></label>
+            <label class="opt" data-g="q_onboarding"><input type="radio" name="q_onboarding" value="processo_formal"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Processo formal com checklist, prazo e responsáveis</span></label>
+          </div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Os clientes costumam recomprar ou renovar?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_recompra"><input type="radio" name="q_recompra" value="nao"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Não — a maioria compra uma vez só</span></label>
+            <label class="opt" data-g="q_recompra"><input type="radio" name="q_recompra" value="alguns"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Alguns recompram, mas não é a regra</span></label>
+            <label class="opt" data-g="q_recompra"><input type="radio" name="q_recompra" value="maioria"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>A maioria renova ou volta a comprar</span></label>
+            <label class="opt" data-g="q_recompra"><input type="radio" name="q_recompra" value="recorrencia"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Produto recorrente — churn é a principal métrica</span></label>
+          </div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q" for="motivo_churn">Quais são os principais motivos de churn ou insatisfação dos clientes?</label>
+          <textarea id="motivo_churn" placeholder="Ex: entrega atrasada, falta de comunicação, expectativa não alinhada na venda, produto não atendeu..."></textarea>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q">Clientes costumam indicar outros clientes?</label>
+          <div class="opts">
+            <label class="opt" data-g="q_indicacao"><input type="radio" name="q_indicacao" value="raramente"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Raramente — não é um canal relevante</span></label>
+            <label class="opt" data-g="q_indicacao"><input type="radio" name="q_indicacao" value="espontaneo"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Sim, espontaneamente, mas sem programa formal</span></label>
+            <label class="opt" data-g="q_indicacao"><input type="radio" name="q_indicacao" value="programa"/><span class="opt-indicator"><span class="opt-dot"></span></span><span>Sim, temos um programa de indicação estruturado</span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9: DIFERENCIAIS E CONCORRÊNCIA -->
+      <div class="block">
+        <div class="block-header"><div class="block-num">09</div><div><div class="block-title">Diferenciais e concorrência</div><div class="block-sub">O que te diferencia e quem disputa os mesmos clientes</div></div></div>
+        <div class="field">
+          <label class="q" for="diferenciais">Quais são os principais diferenciais da sua empresa vs. concorrentes?<span class="req">*</span></label>
+          <textarea id="diferenciais" placeholder="O que os clientes mais elogiam? O que você faz diferente? Por que te escolhem?"></textarea>
+          <div class="err" id="err-diferenciais">Campo obrigatório</div>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q" for="concorrentes">Quem são os principais concorrentes que aparecem nas suas negociações?</label>
+          <textarea id="concorrentes" placeholder="Pode ser concorrente direto, substituto, ou 'não fazer nada / resolver internamente'"></textarea>
+        </div>
+        <div class="field-divider"></div>
+        <div class="field">
+          <label class="q" for="cliente_nao_quer">Que tipo de cliente você NÃO quer mais atender e por quê?</label>
+          <textarea id="cliente_nao_quer" placeholder="Isso ajuda a construir os critérios de desqualificação do playbook"></textarea>
+        </div>
+      </div>
+
       <div class="submit-wrap">
         <button class="btn-submit" id="btn-submit" onclick="submitForm()">Gerar meu diagnóstico →</button>
       </div>
@@ -729,7 +866,7 @@ function handleLogoDrop(e) {
 }
 
 function updateProgress() {
-  const req = ['q_quem_vende','q_processo','q_funil','q_rotina','q_crm','q_maior_problema'];
+  const req = ['q_quem_vende','q_processo','q_funil','q_rotina','q_crm','q_maior_problema','q_motivo_perda','q_proposta_estrutura','q_onboarding'];
   const filled = req.filter(n => !!getRadio(n)).length;
   document.getElementById('progress').style.width = Math.round(filled/req.length*100)+'%';
   document.getElementById('progress-label').textContent = filled+' de '+req.length+' blocos preenchidos';
@@ -773,6 +910,17 @@ function validate(){
   ['q_monetizacao','q_quem_vende','q_processo','q_funil','q_rotina','q_crm','q_maior_problema'].forEach(f=>{
     const v=getRadio(f);showErr(f,!v);if(!v)ok=false;
   });
+  // novos campos obrigatórios
+  const ultimo_fechado=document.getElementById('ultimo_fechado').value.trim();
+  showErr('ultimo_fechado',!ultimo_fechado);if(!ultimo_fechado)ok=false;
+  const ultimo_perdido=document.getElementById('ultimo_perdido').value.trim();
+  showErr('ultimo_perdido',!ultimo_perdido);if(!ultimo_perdido)ok=false;
+  const objecoes_comuns=document.getElementById('objecoes_comuns').value.trim();
+  showErr('objecoes_comuns',!objecoes_comuns);if(!objecoes_comuns)ok=false;
+  const modelo_precificacao=document.getElementById('modelo_precificacao').value.trim();
+  showErr('modelo_precificacao',!modelo_precificacao);if(!modelo_precificacao)ok=false;
+  const diferenciais=document.getElementById('diferenciais').value.trim();
+  showErr('diferenciais',!diferenciais);if(!diferenciais)ok=false;
   return ok;
 }
 
@@ -805,7 +953,27 @@ function collectData(){
     metricas:getChecks('q_metricas').join(', '),
     sabe_conversao:getRadio('q_sabe_conversao'),
     maior_problema:getRadio('q_maior_problema'),
-    contexto:document.getElementById('contexto').value.trim()
+    contexto:document.getElementById('contexto').value.trim(),
+    // bloco 06
+    ultimo_fechado:document.getElementById('ultimo_fechado').value.trim(),
+    ultimo_perdido:document.getElementById('ultimo_perdido').value.trim(),
+    objecoes_comuns:document.getElementById('objecoes_comuns').value.trim(),
+    respostas_objecoes:document.getElementById('respostas_objecoes').value.trim(),
+    motivo_perda:getRadio('q_motivo_perda'),
+    // bloco 07
+    proposta_estrutura:getRadio('q_proposta_estrutura'),
+    modelo_precificacao:document.getElementById('modelo_precificacao').value.trim(),
+    desconto:getRadio('q_desconto'),
+    prazo_proposta:getRadio('q_prazo_proposta'),
+    // bloco 08
+    onboarding:getRadio('q_onboarding'),
+    recompra:getRadio('q_recompra'),
+    motivo_churn:document.getElementById('motivo_churn').value.trim(),
+    indicacao:getRadio('q_indicacao'),
+    // bloco 09
+    diferenciais:document.getElementById('diferenciais').value.trim(),
+    concorrentes:document.getElementById('concorrentes').value.trim(),
+    cliente_nao_quer:document.getElementById('cliente_nao_quer').value.trim()
   };
 }
 
@@ -852,6 +1020,26 @@ async function submitForm(){
     'Sabe conversão': data.sabe_conversao,
     'Maior problema': data.maior_problema,
     Contexto:         data.contexto,
+    // bloco 06
+    'Último fechado':       data.ultimo_fechado,
+    'Último perdido':       data.ultimo_perdido,
+    'Objeções comuns':      data.objecoes_comuns,
+    'Respostas a objeções': data.respostas_objecoes,
+    'Motivo de perda':      data.motivo_perda,
+    // bloco 07
+    'Proposta (estrutura)': data.proposta_estrutura,
+    'Modelo de precificação': data.modelo_precificacao,
+    'Política de desconto': data.desconto,
+    'Prazo resposta proposta': data.prazo_proposta,
+    // bloco 08
+    Onboarding:             data.onboarding,
+    Recompra:               data.recompra,
+    'Motivo de churn':      data.motivo_churn,
+    Indicação:              data.indicacao,
+    // bloco 09
+    Diferenciais:           data.diferenciais,
+    Concorrentes:           data.concorrentes,
+    'Cliente que não quer': data.cliente_nao_quer,
     'Data envio':     new Date().toLocaleString('pt-BR'),
   };
 
