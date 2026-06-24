@@ -318,24 +318,24 @@
   .como-sub { font-size: 15px; color: rgba(210,205,255,0.9); margin-top: 12px; }
 
   .timeline {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    position: relative; gap: 0;
+    display: flex; flex-wrap: wrap;
+    position: relative; gap: 24px 0;
   }
   .timeline::before {
     content: '';
     position: absolute;
-    top: 32px; left: 12%; right: 12%; height: 1px;
+    top: 26px; left: 8%; right: 8%; height: 1px;
     background: linear-gradient(to right, transparent, var(--purple) 20%, var(--cyan) 80%, transparent);
   }
-  .t-item { padding: 0 20px; text-align: center; }
+  .t-item { flex: 1 1 16%; min-width: 140px; padding: 0 10px; text-align: center; }
   .t-dot {
-    width: 64px; height: 64px; border-radius: 50%;
+    width: 52px; height: 52px; border-radius: 50%;
     background: var(--navy);
     border: 1px solid var(--purple);
     display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 28px; position: relative; z-index: 1;
+    margin: 0 auto 22px; position: relative; z-index: 1;
     font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 20px; font-weight: 800;
+    font-size: 17px; font-weight: 800;
     color: var(--purple-soft);
     transition: all 0.3s;
   }
@@ -346,15 +346,15 @@
     border-color: transparent;
   }
   .t-week {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--cyan); margin-bottom: 10px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--cyan); margin-bottom: 8px;
   }
   .t-title {
     font-family: 'Bricolage Grotesque', sans-serif;
-    font-size: 16px; font-weight: 800; line-height: 1.2; margin-bottom: 10px;
+    font-size: 14px; font-weight: 800; line-height: 1.2; margin-bottom: 8px;
     color: var(--white);
   }
-  .t-desc { font-size: 13px; color: rgba(210,205,255,0.88); line-height: 1.65; }
+  .t-desc { font-size: 12px; color: rgba(210,205,255,0.88); line-height: 1.55; }
 
   /* ── PARA QUEM ── */
   .quem-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
@@ -569,12 +569,12 @@
   <div class="hero-content">
     <div class="hero-badge fu">
       <span class="hero-badge-dot"></span>
-      Programa de Implantação Comercial · 30 dias
+      Programa de Implantação Comercial · 45 dias
     </div>
     <h1 class="hero-title fu d1">
       Seu comercial<br>
       <span class="grad">pronto e rodando</span><br>
-      em 30 dias.
+      em 45 dias.
     </h1>
     <p class="hero-sub fu d2">
       Sem plano bonito que fica na gaveta. Sem teoria sem fim.<br>
@@ -586,11 +586,11 @@
     </div>
     <div class="hero-stat-row fu d4">
       <div class="hero-stat">
-        <strong>30</strong>
+        <strong>45</strong>
         <span>dias de implantação</span>
       </div>
       <div class="hero-stat">
-        <strong>4</strong>
+        <strong>6</strong>
         <span>encontros online</span>
       </div>
       <div class="hero-stat">
@@ -860,7 +860,7 @@
         <div class="label">O que você constrói</div>
         <h2 class="section-title">Quatro pilares.<br>Um comercial completo.</h2>
       </div>
-      <p class="entrega-desc">Cada semana você entrega uma parte estruturada do seu processo. No final dos 30 dias, tudo está rodando — não só desenhado.</p>
+      <p class="entrega-desc">Cada semana você entrega uma parte estruturada do seu processo. No final dos 45 dias, tudo está rodando — não só desenhado.</p>
     </div>
     <div class="entrega-grid">
       <div class="e-card">
@@ -874,15 +874,33 @@
       </div>
       <div class="e-card">
         <span class="e-card-badge">Semana 2</span>
-        <h3 class="e-card-title">CRM e Rotina Comercial</h3>
+        <h3 class="e-card-title">Rotina Comercial</h3>
         <ul class="e-card-list">
-          <li>Pipeline configurado no seu CRM</li>
           <li>O que o time faz todo dia e toda semana</li>
           <li>Como o gestor acompanha sem microgerenciar</li>
+          <li>Cadência de prospecção e follow-up definida</li>
         </ul>
       </div>
       <div class="e-card">
         <span class="e-card-badge">Semana 3</span>
+        <h3 class="e-card-title">CRM — Configuração</h3>
+        <ul class="e-card-list">
+          <li>Pipeline configurado no seu CRM</li>
+          <li>Etapas e campos alinhados ao seu funil real</li>
+          <li>Time apto a usar no dia a dia, sem fricção</li>
+        </ul>
+      </div>
+      <div class="e-card">
+        <span class="e-card-badge">Semana 4</span>
+        <h3 class="e-card-title">CRM — Boas Práticas</h3>
+        <ul class="e-card-list">
+          <li>Rotina de atualização do pipeline</li>
+          <li>Como acompanhar resultados direto no CRM</li>
+          <li>CRM virando hábito, não mais um cemitério de negócios</li>
+        </ul>
+      </div>
+      <div class="e-card">
+        <span class="e-card-badge">Semana 5</span>
         <h3 class="e-card-title">Métricas que importam</h3>
         <ul class="e-card-list">
           <li>KPIs de performance e metas definida</li>
@@ -891,12 +909,12 @@
         </ul>
       </div>
       <div class="e-card">
-        <span class="e-card-badge">Semana 4</span>
+        <span class="e-card-badge">Semana 6</span>
         <h3 class="e-card-title">Playbook Comercial</h3>
         <ul class="e-card-list">
           <li>Cadência e roteiros de trabalho para o vendedor</li>
-          <li>Script de vendas</li>
-          <li>Documentação completa do programa (ICP, funil, rotinas, scripts e métricas)</li>
+          <li>Script de vendas e documentação completa do programa</li>
+          <li>Apresentação do acompanhamento mensal pós-implantação</li>
         </ul>
       </div>
     </div>
@@ -908,8 +926,8 @@
   <div class="como-wrap">
     <div class="como-header">
       <div class="label" style="justify-content:center;">Como funciona</div>
-      <h2 class="section-title">30 dias. 4 semanas.<br>processo de vendas funcionando.</h2>
-      <p class="como-sub">4 encontros online + suporte assíncrono durante todo o processo</p>
+      <h2 class="section-title">45 dias. 6 semanas.<br>processo de vendas funcionando.</h2>
+      <p class="como-sub">6 encontros online + suporte assíncrono durante todo o processo</p>
     </div>
     <div class="timeline">
       <div class="t-item">
@@ -921,20 +939,32 @@
       <div class="t-item">
         <div class="t-dot">2</div>
         <div class="t-week">Semana 2</div>
-        <div class="t-title">CRM e Rotina Comercial</div>
-        <p class="t-desc">Configuramos o CRM, e definimos o uso no dia a dia.</p>
+        <div class="t-title">Rotina Comercial</div>
+        <p class="t-desc">Definimos o que o time faz todo dia e toda semana, com cadência de prospecção e follow-up.</p>
       </div>
       <div class="t-item">
         <div class="t-dot">3</div>
         <div class="t-week">Semana 3</div>
-        <div class="t-title">Métricas</div>
-        <p class="t-desc">Implantamos a rotina semanal da gestão e os KPIs. Você sabe o que medir e como agir em cima dos dados.</p>
+        <div class="t-title">CRM — Configuração</div>
+        <p class="t-desc">Configuramos o pipeline no seu CRM, alinhado ao funil que construímos.</p>
       </div>
       <div class="t-item">
         <div class="t-dot">4</div>
         <div class="t-week">Semana 4</div>
+        <div class="t-title">CRM — Boas Práticas</div>
+        <p class="t-desc">Você aprende a acompanhar resultados direto no CRM, sem ele virar cemitério de negócios.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-dot">5</div>
+        <div class="t-week">Semana 5</div>
+        <div class="t-title">Métricas</div>
+        <p class="t-desc">Implantamos a rotina semanal da gestão e os KPIs. Você sabe o que medir e como agir em cima dos dados.</p>
+      </div>
+      <div class="t-item">
+        <div class="t-dot">6</div>
+        <div class="t-week">Semana 6</div>
         <div class="t-title">Playbook Comercial</div>
-        <p class="t-desc">Documentamos o processo de venda — como abordar, diagnosticar e fechar, replicável por qualquer vendedor.</p>
+        <p class="t-desc">Documentamos o processo de venda e apresentamos o acompanhamento mensal pós-implantação.</p>
       </div>
     </div>
   </div>
@@ -1196,7 +1226,7 @@
     <div>
       <div class="label">Próximo passo</div>
       <h2 class="cta-title">Pronto para ter um comercial que <span class="grad">funciona</span>?</h2>
-      <p class="cta-sub">Em 30 dias você tem um processo real, rodando no seu negócio. Não um documento, não uma apresentação — o comercial de pé.</p>
+      <p class="cta-sub">Em 45 dias você tem um processo real, rodando no seu negócio. Não um documento, não uma apresentação — o comercial de pé.</p>
       <a href="https://wa.me/5541999352190" target="_blank" rel="noopener" class="btn-primary" style="font-size:15px;padding:18px 44px;">Quero começar agora →</a>
     </div>
     <div class="detail-list">
@@ -1204,14 +1234,14 @@
         <div class="detail-icon">⏱</div>
         <div>
           <div class="detail-label">Duração</div>
-          <div class="detail-val">30 dias — 4 semanas de implantação ativa</div>
+          <div class="detail-val">45 dias — 6 semanas de implantação ativa</div>
         </div>
       </div>
       <div class="detail-row">
         <div class="detail-icon">💻</div>
         <div>
           <div class="detail-label">Formato</div>
-          <div class="detail-val">4 encontros online + suporte direto durante todo o processo</div>
+          <div class="detail-val">6 encontros online + suporte direto durante todo o processo</div>
         </div>
       </div>
       <div class="detail-row">
